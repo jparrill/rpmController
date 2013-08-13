@@ -18,6 +18,15 @@ import hashlib
 import codecs
 
 
+import ConfigParser
+
+config = ConfigParser.RawConfigParser()
+config.read('/opt/pdi/rpmControler/rpmControler.ini')
+
+ip_mongo = config.get('mongo', 'ip')
+port_mongo = config.getint('mongo','port')
+
+
 horaRaw = time.time()
 hora = time.ctime(horaRaw)
 
@@ -76,7 +85,7 @@ id_=codigo(cadena = aux2)
 
 #connect to mongodb
 
-connection = Connection('pspaco.hi.inet', 27017)
+connection = Connection(ip_mongo, port_mongo)
 
 # get database
 
