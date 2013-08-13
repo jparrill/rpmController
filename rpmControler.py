@@ -123,6 +123,6 @@ for i in paquetes:
   if (rpms.find({"id_": id_, "rpm": i, "date_installed": date_installed}).count() == 0):
     rpms.insert(info_rpms)
   #else:
-    print "ya existia el rpm"
+  #  print "ya existia el rpm"
 
 
