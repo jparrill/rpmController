@@ -2,23 +2,14 @@
 
 import platform
 import datetime
-
 import time
-
 import os
-
 from pymongo import Connection
-
 import datetime
-
 import time
-
 import hashlib
-
 import codecs
-
 import sys
-
 import getopt
 
 
@@ -74,30 +65,7 @@ def run(string, busqueda):
       print "id=%(_id)s id_=%(id_)s name=%(rpm)s date_process=%(date_process)s date_installed=%(date_installed)s" % record
   
 
-
-  
-
-
-
-  #print post
-
-  #rpms = db.rpms
-
-  #insert one recorder
-
-  #rpms.insert(info_rpms)
-
-
-#prueba = rpms.find({"name": "dev-owd-pushserver-01"})
-
-
-#for record in rpms.find():
-#        # because record is a dict, we get you use lots of python magic
-#        print "id=%(_id)s id_=%(id_)s name=%(name)s ips=%(ips)s date=%(date)s" % record
-#        for task in record["paquetes"]:
-#          print task
              
-
 
 def main():
 
@@ -108,6 +76,8 @@ def main():
     #Error handling for unknown or incorrect number of options
     print str(err)
     sys.exit(2)
+
+  #dependiendo del parametro hago un find u otro
 
   for opt, arg in optsList:
     if opt in ('-i', '--ip'):
@@ -121,19 +91,6 @@ def main():
         run(arg,"ONLYRPM")
     else:
         print "Unhandled option"
-        sys.exit(2)
-
-
-    
-#    if len(sys.argv) >= 2:
-#        print "La cadena introducida tiene",len(sys.argv[1]),"caracteres"
-#    else:
-#        print "Este programa necesita un parametro";
-#        sys.exit()
-#
-#    arg =sys.argv
-#    print "parametros:"+arg[1]
-#    run(arg[1],"IP")dd
-   
+        sys.exit(2)   
 
 main()
