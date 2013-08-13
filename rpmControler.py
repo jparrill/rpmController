@@ -2,35 +2,30 @@
 
 import platform
 import datetime
-
 import time
-
 import os
-
 from pymongo import Connection
-
 import datetime
-
 import time
-
 import hashlib
-
 import codecs
-
-
 import ConfigParser
 
+
+# Para leer donde esta instalado el mongodb
 config = ConfigParser.RawConfigParser()
 config.read('/opt/pdi/rpmControler/rpmControler.ini')
 
 ip_mongo = config.get('mongo', 'ip')
 port_mongo = config.getint('mongo','port')
 
-
+#Para sacar la hora de cada ejecucíon
 horaRaw = time.time()
 hora = time.ctime(horaRaw)
 
 
+#trato de sacar un codigo unico md5 que me identifique la maquina
+#strip_digits(name) + strip_digits(ips) + strip_digits(system) + strip_digits(release) + strip_digits(version) + strip_digits(distribution)
 def codigo(cadena):  
   return hashlib.md5(cadena).hexdigest()
 
@@ -48,7 +43,7 @@ def Ip_Maquina():
             respuesta = respuesta + i
     return respuesta.splitlines()
 
-
+#devuelve un diccionario con todos los rpms de la maquina
 def info_paquetes():
 
     paquetes=os.popen('rpm -qa | sort -n')
@@ -56,12 +51,13 @@ def info_paquetes():
     for i in paquetes.readlines():
             respuesta = respuesta + i
     return respuesta.splitlines()
+#para pasar de cadane a lista
 def strip_digits(string):
     result = ''
     for c in string:
         result = result + c
     return result
-
+#saca la fecha en la que se instalo el rpm. cuidado puede haber problemas con el idioma.
 def install_date(string):
     #print 'rpm -qi '+string+' | grep -i "Install date"'
     result = os.popen('rpm -qi '+string+' | grep -i "Install date"| cut -d" " -f4,5,6,7,8')
@@ -81,7 +77,7 @@ release = platform.release()
 version = platform.version()
 distribution = platform.dist()
 aux2 = strip_digits(name) + strip_digits(ips) + strip_digits(system) + strip_digits(release) + strip_digits(version) + strip_digits(distribution)
-id_=codigo(cadena = aux2)
+id_= codigo(cadena = aux2)
 
 #connect to mongodb
 
@@ -116,8 +112,6 @@ if (info_pcs.find({"id_": id_}).count() == 0):
 #  print "Ya existia el host..."
 
 
-
-
 rpms = db.rpms
 for i in paquetes:
   date_installed = install_date(i)
@@ -128,5 +122,7 @@ for i in paquetes:
   info_rpms ["date_installed"] = date_installed
   if (rpms.find({"id_": id_, "rpm": i, "date_installed": date_installed}).count() == 0):
     rpms.insert(info_rpms)
+  #else:
+    print "ya existia el rpm"
 
 
