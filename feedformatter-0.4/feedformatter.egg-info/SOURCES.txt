@@ -1,0 +1,11 @@
+CHANGES
+COPYING
+INSTALL
+MANIFEST.in
+README
+feedformatter.py
+setup.py
+feedformatter.egg-info/PKG-INFO
+feedformatter.egg-info/SOURCES.txt
+feedformatter.egg-info/dependency_links.txt
+feedformatter.egg-info/top_level.txt

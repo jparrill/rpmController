@@ -19,7 +19,7 @@ config.read('/opt/pdi/rpmControler/rpmControler.ini')
 ip_mongo = config.get('mongo', 'ip')
 port_mongo = config.getint('mongo','port')
 
-#Para sacar la hora de cada ejecucíon
+#Para sacar la hora de cada ejecucion
 horaRaw = time.time()
 hora = time.ctime(horaRaw)
 
@@ -123,6 +123,6 @@ for i in paquetes:
   if (rpms.find({"id_": id_, "rpm": i, "date_installed": date_installed}).count() == 0):
     rpms.insert(info_rpms)
   #else:
-  #  print "ya existia el rpm"
+    #print "find del find"
 
 

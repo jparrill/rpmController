@@ -11,13 +11,23 @@ import hashlib
 import codecs
 import sys
 import getopt
+import ConfigParser
+
+
+# Para leer donde esta instalado el mongodb
+config = ConfigParser.RawConfigParser()
+config.read('/opt/pdi/rpmControler/rpmControler.ini')
+
+ip_mongo = config.get('mongo', 'ip')
+port_mongo = config.getint('mongo','port')
+
 
 
 def run(string, busqueda):
 
   #connect to mongodb
   
-  connection = Connection('pspaco.hi.inet', 27017)
+  connection = Connection(ip_mongo, port_mongo)
 
   # get database
 

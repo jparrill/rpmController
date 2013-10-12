@@ -1,4 +1,4 @@
-%define _base RpmControles
+%define _base RpmControler
 %define _psdir /opt/pdi/rpmControler/
 
 
@@ -14,7 +14,7 @@ URL:           http://www.tid.es
 Vendor:        Telefonica PDI 
 BuildRoot: %{_topdir}/BUILD/%{name}
 Provides: %{_base}
-Requires: nodejs => 0.8
+#Requires: nodejs => 0.8
 
 %description
 
@@ -61,41 +61,29 @@ then
   mkdir -p $RPM_BUILD_ROOT%{_psdir}
 fi
 
-cp -r %SOURCE0/. $RPM_BUILD_ROOT%{_psdir}
+
+if [ ! -d $RPM_BUILD_ROOT/etc/cron.d/ ]
+then
+  mkdir -p $RPM_BUILD_ROOT/etc/cron.d/
+fi
 
 
+cp %SOURCE0/*.py $RPM_BUILD_ROOT%{_psdir}
+cp %SOURCE0/*.ini $RPM_BUILD_ROOT%{_psdir}
+cp -r %SOURCE0/cron/* $RPM_BUILD_ROOT/etc/cron.d/
+
+echo "run after the installation: easy_install pymongo"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
-%post
-if [ "$1" = "1" ] 
-then
-  # Perform tasks to prepare for the initial installation
-  if [ ! -f /etc/init.d/pushserverd ]
-  then
-    ln -s %{_psdir}/src/pushserverd /etc/init.d/pushserverd
-  fi
-fi
-if [ ! -d /var/log/push_server/ ]
-then
-  mkdir -p /var/log/push_server/
-fi
-if [ ! -f /etc/logrotate.d/push_server.conf ]
-then
-  cp %{_psdir}/other/logrotate/push_server.conf /etc/logrotate.d/
-fi
-
-%postun
-if [ $1 -eq 0 ]; then
-  # Perform tasks to prepare for the initial uninstallation
-  unlink /etc/init.d/pushserverd
-  rm -f /etc/logrotate.d/push_server.conf
-fi
 %files
 %defattr(755,rpm_controler,rpm_controler,-)
 %dir %{_psdir}/
 %{_psdir}/*
+%defattr(0644,root,root,-)
+%dir /etc/cron.d/
+/etc/cron.d/*
 
 %changelog

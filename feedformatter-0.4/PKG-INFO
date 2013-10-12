@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: feedformatter
+Version: 0.4
+Summary: A Python library for generating news feeds in RSS and Atom formats
+Home-page: http://code.google.com/p/feedparser/
+Author: Luke Maurits
+Author-email: luke@maurits.id.au
+License: http://www.luke.maurits.id.au/software/bsdlicense.txt
+Description: UNKNOWN
+Platform: UNKNOWN
