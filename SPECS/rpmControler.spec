@@ -1,4 +1,4 @@
-%define _base RpmControler
+%define _base rpmControler
 %define _psdir /opt/pdi/rpmControler/
 
 
@@ -14,7 +14,7 @@ URL:           http://www.tid.es
 Vendor:        Telefonica PDI 
 BuildRoot: %{_topdir}/BUILD/%{name}
 Provides: %{_base}
-#Requires: nodejs => 0.8
+Requires: python-pip gcc python-devel
 
 %description
 
@@ -73,6 +73,10 @@ cp %SOURCE0/*.ini $RPM_BUILD_ROOT%{_psdir}
 cp -r %SOURCE0/cron/* $RPM_BUILD_ROOT/etc/cron.d/
 
 echo "run after the installation: easy_install pymongo"
+
+%post
+result=`pip-python install pymongo`
+result=`pip-python install hashlib`
 
 %clean
 rm -rf $RPM_BUILD_ROOT
