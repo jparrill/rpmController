@@ -110,8 +110,18 @@ def run():
   #else:
   #  print "Ya existia el host..."
 
+  dict_rpms= {}
 
   rpms = db.rpms
+
+  for record in rpms.find({"id_": id_}):
+    if (record["rpm"].find(" (deleted)") == -1):
+      dict_rpms[record["rpm"]] = False
+    #else:
+      #print "excluyo:"
+      #print record["rpm"]
+
+  
   for i in paquetes:
     date_installed = install_date(i)
     info_rpms = {}
@@ -120,9 +130,27 @@ def run():
     info_rpms ["date_process"] = date
     info_rpms ["date_installed"] = date_installed
     if (rpms.find({"id_": id_, "rpm": i, "date_installed": date_installed}).count() == 0):
+      #print "print inserto:" + i
       rpms.insert(info_rpms)
     #else:
       #print "find del find"
+
+    dict_rpms[i] = True
+
+  for item in dict_rpms:
+    #print item
+    #print dict_rpms[item]
+    if (dict_rpms[item] == False):
+      if (rpms.find({"id_": id_, "rpm": item + " (deleted)"}).count() == 0):
+        date_installed = install_date(i)
+        info_rpms = {}
+        info_rpms ["id_"] = id_
+        info_rpms ["rpm"] = item + " (deleted)"
+        info_rpms ["date_process"] = date
+        info_rpms ["date_installed"] = ""
+        rpms.insert(info_rpms)
+
+
 
 def main():
   run()
