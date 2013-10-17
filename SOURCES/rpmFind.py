@@ -73,6 +73,10 @@ def run(string, busqueda):
     for record in rpms.find({"id_": id_}):
       # because record is a dict, we get you use lots of python magic
       print "id=%(_id)s id_=%(id_)s name=%(rpm)s date_process=%(date_process)s date_installed=%(date_installed)s" % record
+  elif busqueda == "ALLHOSTs":
+    for host in info_pcs.find({}).sort("name"):
+       print "name=%(name)s ips=%(ips)s date=%(date)s system=%(system)s release=%(release)s version=%(version)s distribution=%(distribution)s" % host
+
   
 
              
@@ -80,7 +84,7 @@ def run(string, busqueda):
 def main():
 
   try:
-    optsList, argsList = getopt.getopt(sys.argv[1:], "i:h:o:r:", ["ip=", "host=", "onlyhost", "onlyrpm"])
+    optsList, argsList = getopt.getopt(sys.argv[1:], "i:h:o:r:A", ["ip=", "host=", "onlyhost", "onlyrpm", "allhost"])
 
   except getopt.GetoptError, err:
     #Error handling for unknown or incorrect number of options
@@ -99,6 +103,8 @@ def main():
         run(arg,"ONLYHOST")
     elif opt in ('-r', '--onlyrpm'):
         run(arg,"ONLYRPM")
+    elif opt in ('-A', '--allhost'):
+        run(arg,"ALLHOSTs")
     else:
         print "Unhandled option"
         sys.exit(2)   
