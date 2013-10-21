@@ -1,6 +1,0 @@
-[rpmControler]
-name=rpmControler
-baseurl=http://artifacts.hi.inet/others/rpmControler/
-enabled=1
-gpgcheck=0
-priority=1
