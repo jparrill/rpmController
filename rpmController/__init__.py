@@ -48,15 +48,28 @@ def run():
   info_host['distribution'] = platform.dist()
   packages = rpm_getinfo()
   ## Show info
-  print info_host
-  pp = pprint.PrettyPrinter(indent=4)
-  pp.pprint(packages)
+  #print info_host
+  #pp = pprint.PrettyPrinter(indent=4)
+  #pp.pprint(packages)
   ##
+  return info_host packages
 
 def mongo_con(ip, port, rpmdb):
   connection = Connection(ip, port)
-  db = connection.rpmdb
-  return db.rpms_collection
+  return connection.rpmdb
 
-run()
-collection = mongo_con(ip_mongo, port_mongo, db_mongo)
+def collection_maker(db, collection, info_host, packages ):
+  meta = collection + '_meta'
+  content = collection + '_packages'
+  db.meta.save(info_host)
+  db.content.save(packages)
+  
+
+info_host = {}
+packages = []
+
+info_host, packages = run()
+db = mongo_con(ip_mongo, port_mongo, db_mongo)
+result = collection_maker(db, info_host['name'], info_host, packages)
+
+
