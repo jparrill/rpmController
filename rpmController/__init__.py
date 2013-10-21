@@ -39,7 +39,7 @@ def rpm_getinfo():
 def run():
   packages = []
   info_host = {}
-  info_host['name'] = socket.getfqdn()
+  info_host['fqdn'] = socket.getfqdn()
   info_host['ip'] = socket.gethostbyname(socket.gethostname())
   info_host['date'] = time.ctime(time.time())
   info_host['system'] = platform.system()
@@ -52,17 +52,17 @@ def run():
   #pp = pprint.PrettyPrinter(indent=4)
   #pp.pprint(packages)
   ##
-  return info_host packages
+  return info_host, packages
 
 def mongo_con(ip, port, rpmdb):
   connection = Connection(ip, port)
   return connection.rpmdb
 
 def collection_maker(db, collection, info_host, packages ):
-  meta = collection + '_meta'
-  content = collection + '_packages'
-  db.meta.save(info_host)
-  db.content.save(packages)
+  info = collection.replace("-", "_") + '_info'
+  content = collection.replace("-", "_") + '_packages'
+  db[info].insert(info_host)
+  db[content].insert(packages)
   
 
 info_host = {}
@@ -70,6 +70,6 @@ packages = []
 
 info_host, packages = run()
 db = mongo_con(ip_mongo, port_mongo, db_mongo)
-result = collection_maker(db, info_host['name'], info_host, packages)
+result = collection_maker(db, socket.gethostname(), info_host, packages)
 
 
