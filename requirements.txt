@@ -1,0 +1,3 @@
+feedformatter==0.4
+pymongo>=2.6.3
+hashlib==20081119
