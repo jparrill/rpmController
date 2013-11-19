@@ -37,7 +37,8 @@ class Info(object):
     packages = []
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
     for item in db[collection].find():
-      packages.append(item)
+      packages.append(item) 
+    db[collection].disconnect
     return packages
 
     

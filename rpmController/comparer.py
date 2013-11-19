@@ -8,22 +8,27 @@ def formatter(collection):
     collection = collection.replace(".", "_")
     return collection
 
+def merger(rpm_packages, mongo_packages):
+	unique_list = []
+	for i in rpm_packages:
+		if i not in mongo_packages:
+			unique_list.append(i)
+	return unique_list
+
 info_host = {}
 packages = []
 rpms = rpm_api.Info()
 info_host, packages = rpms.catcher()
 
-#mongo_api.Info(formatter(info_host['fqdn']),info_host, packages)
 mongo = mongo_api.Info()
 mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
 
-mergedlist = set(packages + mongo_packages)
+merged_packages = merger(packages, mongo_packages)
 
+#print merged_list
 ## Show info
-#print info_host
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(mongo_packages)
+pp.pprint(merged_packages)
 
-print type(mergedlist)
 
 
