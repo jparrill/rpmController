@@ -22,13 +22,15 @@ info_host, packages = rpms.catcher()
 
 mongo = mongo_api.Info()
 mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
-
 merged_packages = merger(packages, mongo_packages)
+
+mongo.collection_maker(formatter(info_host['fqdn']), info_host, merged_packages)
+
 
 #print merged_list
 ## Show info
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(merged_packages)
+#pp = pprint.PrettyPrinter(indent=4)
+#pp.pprint(merged_packages)
 
 
 
