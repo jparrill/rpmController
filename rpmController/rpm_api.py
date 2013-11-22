@@ -2,7 +2,6 @@ import platform
 import socket
 import time
 import rpm
-import pprint
 
 class Info(object):
   def __init__(self):
@@ -37,10 +36,6 @@ class Info(object):
     info_host['version'] = platform.version()
     info_host['distribution'] = platform.dist()
     packages = self.rpm_getinfo()
-    ## Show info
-    #print info_host
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(packages)
-    ##
+
     return info_host, packages
 

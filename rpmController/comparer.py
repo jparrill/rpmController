@@ -7,25 +7,22 @@ def formatter(collection):
     collection = collection.replace(".", "_")
     return collection
 
-def analize(rpm, mongo_packages):
+def rpm_analize(rpm, mongo_packages):
+  ## Comparison between 1 rpm and all rpm_packages storaged in MongoDB
+  ## Purpose: Know if the rpm is in MongoDB
   pkg_list = []
-  last = '0'
+  last = '0' 
   if mongo_packages != []:  
     for mongo_rpm in mongo_packages:
-      if mongo_rpm["deleted"] == 'true':
-        ## If element is a deleted RPM will not valuate
-        pass
+      if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"]:
+        ## Rpm exist in Mongo_list
+        status = '0'
+        last = '1'
+        break
 
-      else:
-        if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"]:
-          ## Rpm exist in Mongo_list
-          status = '0'
-          last = '1'
-          break
-
-    if last == '0':
-      ## If there is not RPM in Mongo_list
-      status = '1'
+      if last == '0':
+        ## If there is not RPM in Mongo_list
+        status = '1'
 
   else:
     # Empty collection
@@ -33,48 +30,133 @@ def analize(rpm, mongo_packages):
 
   return status
 
-def merger(rpm_packages, mongo_packages):
-  unique_list = []
+def mongo_analize(mongo_rpm, rpm_packages):
+  ## Comparison between 1 rpm storaged in MongoDB and all rpm_packages of the node
+  ## Purpose: Mark 1 rpm in MongoDB as Deleted
   for rpm in rpm_packages:
-    pkg_status = analize(rpm, mongo_packages)
-    if pkg_status == '0':
-      ## Rpm Exists in MongoDB
-      pass
-
-    if pkg_status == '1':
-      ## The rpm is not exist, append!!
-      unique_list.append(rpm)
-
-    if pkg_status == '2':
-      ## If the Collection is empty
-      print "Collection Empty, fullfilling..."
-      unique_list.extend(rpm_packages)
+    if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'false':
+      status = '0'
       break
 
-  return unique_list
+    elif rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'true':
+      ## Update Mongo with this rpm as installed
+      status = '3'
+      break
+
+    elif mongo_rpm["deleted"] == 'true':
+      status = '0'
+
+    else:
+      status = '1'
+
+  return status
 
 
 
+def merger(rpm_packages, mongo_packages, method, collection):
+  ## Collection parameter is for Mongo method
+  unique_list = []
+  updates = 0
+  if method == 'rpm':
+    for rpm in rpm_packages:
+      pkg_status = rpm_analize(rpm, mongo_packages)
+      if pkg_status == '0':
+        ## Rpm Exists in MongoDB
+        pass
+
+      elif pkg_status == '1':
+        ## The rpm is not exist, append!!
+        print "Adding %s on MongoDB..." % rpm['name'] 
+        unique_list.append(rpm)
+        updates += 1
+
+      elif pkg_status == '2':
+        ## If the Collection is empty
+        print "Collection Empty, fullfilling..."
+        unique_list.extend(rpm_packages)
+        break
+
+#      elif pkg_status == '3':
+#        ## RPM was erased and reinstalled
+#        print "Updatting %s on MongoDB..." % rpm['name'] 
+#        code = mongo.deleter(collection, rpm, 'false')
+#        updates += 1
+
+    return unique_list, updates
+
+  elif method == 'mongo':
+    updates = 0
+    for mongo_rpm in mongo_packages:
+      pkg_status = mongo_analize(mongo_rpm, rpm_packages)
+      if pkg_status == '0':
+        ## Rpm Exists in MongoDB or is deleted
+        pass
+
+      elif pkg_status == '1':
+        ## The rpm is not exist in the node, lets erase in MongoDB
+        ## the last parameter is to set true or false the deleted fliend in MongoDB
+        try:
+          print "Updating %s on MongoDB..." % mongo_rpm['name'] 
+          code = mongo.deleter(collection, mongo_rpm, 'true')
+          updates += 1 
+
+        except:
+          print "Error Updating MongoDB %s collection" % collection
+          raise  
+
+      elif pkg_status == '3':
+        ## RPM was erased and reinstalled
+        print "Updating %s on MongoDB..." % mongo_rpm['name']
+        code = mongo.deleter(collection, mongo_rpm, 'false')
+        updates += 1
+
+    return updates   
+
+
+#print " _____              _____         _           _ _         "
+#print "| __  |___ _____   |     |___ ___| |_ ___ ___| | |___ ___ "
+#print "|    -| . |     |  |   --| . |   |  _|  _| . | | | -_|  _|"
+#print "|__|__|  _|_|_|_|  |_____|___|_|_|_| |_| |___|_|_|___|_|  "
+#print "      |_|                                                 "
 
 info_host = {}
 packages = []
 rpms = rpm_api.Info()
 info_host, packages = rpms.catcher()
 
+print "- Checking database New RPMs"
+
 mongo = mongo_api.Info()
 mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
-merged_packages = merger(packages,mongo_packages)
+merged_packages, updates = merger(packages, mongo_packages, 'rpm', formatter(info_host['fqdn']))
 
-if merged_packages == []:
-  print "there is not changes in the Node"
-else:
+
+if merged_packages != [] and updates == 0:
+  ## Here we can log this entries for the following of the node ;)
+ # print "########################"
+ # print "## New RPMs Installed ##"
+ # print "########################"
+ # print ""
   mongo.collection_maker(formatter(info_host['fqdn']), info_host, merged_packages)
 
+elif updates > 0:
+  print "- Number of Updates in MongoDB: %d" % updates
 
-#print merged_list
-## Show info
-#pp = pprint.PrettyPrinter(indent=4)
-#pp.pprint(merged_packages)
+else:
+  print "- There is not new RPMs in the Node"
 
+
+
+print "- Checking database for Deleted RPMs"
+updates = merger(packages, mongo_packages, 'mongo', formatter(info_host['fqdn']))
+
+if updates > 0:
+  #print "#################"
+  #print "## Erased RPMs ##"
+  #print "#################"
+  #print ""
+  print "- Number of Updates in MongoDB: %d" % updates
+else:
+  print "- There is not RPMs erased in the Node"
 
 
