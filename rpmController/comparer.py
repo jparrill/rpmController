@@ -51,8 +51,6 @@ def mongo_analize(mongo_rpm, rpm_packages):
 
   return status
 
-
-
 def merger(rpm_packages, mongo_packages, method, collection):
   ## Collection parameter is for Mongo method
   unique_list = []
@@ -66,7 +64,7 @@ def merger(rpm_packages, mongo_packages, method, collection):
 
       elif pkg_status == '1':
         ## The rpm is not exist, append!!
-        print "Adding %s on MongoDB..." % rpm['name'] 
+        print "** Adding package on MongoDB: %s" % rpm['name'] 
         unique_list.append(rpm)
         updates += 1
 
@@ -75,12 +73,6 @@ def merger(rpm_packages, mongo_packages, method, collection):
         print "Collection Empty, fullfilling..."
         unique_list.extend(rpm_packages)
         break
-
-#      elif pkg_status == '3':
-#        ## RPM was erased and reinstalled
-#        print "Updatting %s on MongoDB..." % rpm['name'] 
-#        code = mongo.deleter(collection, rpm, 'false')
-#        updates += 1
 
     return unique_list, updates
 
@@ -96,7 +88,7 @@ def merger(rpm_packages, mongo_packages, method, collection):
         ## The rpm is not exist in the node, lets erase in MongoDB
         ## the last parameter is to set true or false the deleted fliend in MongoDB
         try:
-          print "Updating %s on MongoDB..." % mongo_rpm['name'] 
+          print "** Updating package on MongoDB: %s" % mongo_rpm['name'] 
           code = mongo.deleter(collection, mongo_rpm, 'true')
           updates += 1 
 
@@ -106,7 +98,7 @@ def merger(rpm_packages, mongo_packages, method, collection):
 
       elif pkg_status == '3':
         ## RPM was erased and reinstalled
-        print "Updating %s on MongoDB..." % mongo_rpm['name']
+        print "** Updating package on MongoDB: %s" % mongo_rpm['name']
         code = mongo.deleter(collection, mongo_rpm, 'false')
         updates += 1
 
@@ -124,7 +116,7 @@ packages = []
 rpms = rpm_api.Info()
 info_host, packages = rpms.catcher()
 
-print "- Checking database New RPMs"
+print "- Checking database for New RPMs"
 
 mongo = mongo_api.Info()
 mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
@@ -133,10 +125,6 @@ merged_packages, updates = merger(packages, mongo_packages, 'rpm', formatter(inf
 
 if merged_packages != [] and updates == 0:
   ## Here we can log this entries for the following of the node ;)
- # print "########################"
- # print "## New RPMs Installed ##"
- # print "########################"
- # print ""
   mongo.collection_maker(formatter(info_host['fqdn']), info_host, merged_packages)
 
 elif updates > 0:
@@ -151,10 +139,6 @@ print "- Checking database for Deleted RPMs"
 updates = merger(packages, mongo_packages, 'mongo', formatter(info_host['fqdn']))
 
 if updates > 0:
-  #print "#################"
-  #print "## Erased RPMs ##"
-  #print "#################"
-  #print ""
   print "- Number of Updates in MongoDB: %d" % updates
 else:
   print "- There is not RPMs erased in the Node"
