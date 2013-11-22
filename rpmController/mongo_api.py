@@ -36,9 +36,7 @@ class Info(object):
   def get_packages(self, collection):
     packages = []
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
-    for item in db[collection].find():
+    for item in db[collection].find({"deleted":{'$exists': True}}):
       packages.append(item) 
-    db[collection].disconnect
+    #db[collection].disconnect
     return packages
-
-    

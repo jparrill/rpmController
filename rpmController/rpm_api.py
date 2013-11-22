@@ -20,7 +20,7 @@ class Info(object):
       rpm_struct['release'] = package['release']
       rpm_struct['date'] = package.sprintf("%{INSTALLTID:date}")
       rpm_struct['review_date'] = time.ctime(time.time())
-      rpm_struct['deleted'] = False
+      rpm_struct['deleted'] = 'false'
       if rpm_struct not in rpm_collect:
         rpm_collect.append(rpm_struct.copy())
 
