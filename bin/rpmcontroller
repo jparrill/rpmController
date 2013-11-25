@@ -7,6 +7,13 @@
 ##"      |_|                                                 "
 ##
 
+
+from os import path
+import os
+import sys
+
+sys.path.append("../")
+
 from rpmController import rpm_api, mongo_api, comparer
 
 info_host = {}
@@ -18,7 +25,7 @@ info_host, packages = rpms.catcher()
 print "- Checking database for New RPMs"
 
 mongo = mongo_api.Info()
-mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
+mongo_packages = mongo.get_packages(comp.formatter(info_host['fqdn']))
 merged_packages, updates = comp.merger(packages, mongo_packages, 'rpm', comp.formatter(info_host['fqdn']))
 
 
