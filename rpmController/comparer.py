@@ -1,146 +1,108 @@
-import rpm_api
-import mongo_api
-import pprint
+class Comparer(object):
+  def __init__(self):
+    pass
 
-def formatter(collection):
-    collection = collection.replace("-", "_")
-    collection = collection.replace(".", "_")
-    return collection
+  def formatter(self, collection):
+      collection = collection.replace("-", "_")
+      collection = collection.replace(".", "_")
+      return collection
 
-def rpm_analize(rpm, mongo_packages):
-  ## Comparison between 1 rpm and all rpm_packages storaged in MongoDB
-  ## Purpose: Know if the rpm is in MongoDB
-  pkg_list = []
-  last = '0' 
-  if mongo_packages != []:  
-    for mongo_rpm in mongo_packages:
-      if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"]:
-        ## Rpm exist in Mongo_list
-        status = '0'
-        last = '1'
-        break
+  def rpm_analize(self, rpm, mongo_packages):
+    ## Comparison between 1 rpm and all rpm_packages storaged in MongoDB
+    ## Purpose: Know if the rpm is in MongoDB
+    pkg_list = []
+    last = '0' 
+    if mongo_packages != []:  
+      for mongo_rpm in mongo_packages:
+        if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"]:
+          ## Rpm exist in Mongo_list
+          status = '0'
+          last = '1'
+          break
 
-      if last == '0':
-        ## If there is not RPM in Mongo_list
-        status = '1'
-
-  else:
-    # Empty collection
-    status = '2'
-
-  return status
-
-def mongo_analize(mongo_rpm, rpm_packages):
-  ## Comparison between 1 rpm storaged in MongoDB and all rpm_packages of the node
-  ## Purpose: Mark 1 rpm in MongoDB as Deleted
-  for rpm in rpm_packages:
-    if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'false':
-      status = '0'
-      break
-
-    elif rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'true':
-      ## Update Mongo with this rpm as installed
-      status = '3'
-      break
-
-    elif mongo_rpm["deleted"] == 'true':
-      status = '0'
+        if last == '0':
+          ## If there is not RPM in Mongo_list
+          status = '1'
 
     else:
-      status = '1'
+      # Empty collection
+      status = '2'
 
-  return status
+    return status
 
-def merger(rpm_packages, mongo_packages, method, collection):
-  ## Collection parameter is for Mongo method
-  unique_list = []
-  updates = 0
-  if method == 'rpm':
+  def mongo_analize(self, mongo_rpm, rpm_packages):
+    ## Comparison between 1 rpm storaged in MongoDB and all rpm_packages of the node
+    ## Purpose: Mark 1 rpm in MongoDB as Deleted
     for rpm in rpm_packages:
-      pkg_status = rpm_analize(rpm, mongo_packages)
-      if pkg_status == '0':
-        ## Rpm Exists in MongoDB
-        pass
-
-      elif pkg_status == '1':
-        ## The rpm is not exist, append!!
-        print "** Adding package on MongoDB: %s" % rpm['name'] 
-        unique_list.append(rpm)
-        updates += 1
-
-      elif pkg_status == '2':
-        ## If the Collection is empty
-        print "Collection Empty, fullfilling..."
-        unique_list.extend(rpm_packages)
+      if rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'false':
+        status = '0'
         break
 
-    return unique_list, updates
+      elif rpm['name'] == mongo_rpm["name"] and rpm['version'] == mongo_rpm["version"] and rpm['release'] == mongo_rpm["release"] and mongo_rpm["deleted"] == 'true':
+        ## Update Mongo with this rpm as installed
+        status = '3'
+        break
 
-  elif method == 'mongo':
+      elif mongo_rpm["deleted"] == 'true':
+        status = '0'
+
+      else:
+        status = '1'
+
+    return status
+
+  def merger(self, rpm_packages, mongo_packages, method, collection):
+    ## Collection parameter is for Mongo method
+    unique_list = []
     updates = 0
-    for mongo_rpm in mongo_packages:
-      pkg_status = mongo_analize(mongo_rpm, rpm_packages)
-      if pkg_status == '0':
-        ## Rpm Exists in MongoDB or is deleted
-        pass
+    if method == 'rpm':
+      for rpm in rpm_packages:
+        pkg_status = self.rpm_analize(rpm, mongo_packages)
+        if pkg_status == '0':
+          ## Rpm Exists in MongoDB
+          pass
 
-      elif pkg_status == '1':
-        ## The rpm is not exist in the node, lets erase in MongoDB
-        ## the last parameter is to set true or false the deleted fliend in MongoDB
-        try:
-          print "** Updating package on MongoDB: %s" % mongo_rpm['name'] 
-          code = mongo.deleter(collection, mongo_rpm, 'true')
-          updates += 1 
+        elif pkg_status == '1':
+          ## The rpm is not exist, append!!
+          print "** Adding package on MongoDB: %s" % rpm['name'] 
+          unique_list.append(rpm)
+          updates += 1
 
-        except:
-          print "Error Updating MongoDB %s collection" % collection
-          raise  
+        elif pkg_status == '2':
+          ## If the Collection is empty
+          print "Collection Empty, fullfilling..."
+          unique_list.extend(rpm_packages)
+          break
 
-      elif pkg_status == '3':
-        ## RPM was erased and reinstalled
-        print "** Updating package on MongoDB: %s" % mongo_rpm['name']
-        code = mongo.deleter(collection, mongo_rpm, 'false')
-        updates += 1
+      return unique_list, updates
 
-    return updates   
+    elif method == 'mongo':
+      updates = 0
+      for mongo_rpm in mongo_packages:
+        pkg_status = self.mongo_analize(mongo_rpm, rpm_packages)
+        if pkg_status == '0':
+          ## Rpm Exists in MongoDB or is deleted
+          pass
 
+        elif pkg_status == '1':
+          ## The rpm is not exist in the node, lets erase in MongoDB
+          ## the last parameter is to set true or false the deleted fliend in MongoDB
+          try:
+            print "** Updating package on MongoDB: %s" % mongo_rpm['name'] 
+            code = self.mongo.deleter(collection, mongo_rpm, 'true')
+            updates += 1 
 
-#print " _____              _____         _           _ _         "
-#print "| __  |___ _____   |     |___ ___| |_ ___ ___| | |___ ___ "
-#print "|    -| . |     |  |   --| . |   |  _|  _| . | | | -_|  _|"
-#print "|__|__|  _|_|_|_|  |_____|___|_|_|_| |_| |___|_|_|___|_|  "
-#print "      |_|                                                 "
+          except:
+            print "Error Updating MongoDB %s collection" % collection
+            raise  
 
-info_host = {}
-packages = []
-rpms = rpm_api.Info()
-info_host, packages = rpms.catcher()
+        elif pkg_status == '3':
+          ## RPM was erased and reinstalled
+          print "** Updating package on MongoDB: %s" % mongo_rpm['name']
+          code = self.mongo.deleter(collection, mongo_rpm, 'false')
+          updates += 1
 
-print "- Checking database for New RPMs"
+      return updates   
 
-mongo = mongo_api.Info()
-mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
-merged_packages, updates = merger(packages, mongo_packages, 'rpm', formatter(info_host['fqdn']))
-
-
-if merged_packages != [] and updates == 0:
-  ## Here we can log this entries for the following of the node ;)
-  mongo.collection_maker(formatter(info_host['fqdn']), info_host, merged_packages)
-
-elif updates > 0:
-  print "- Number of Updates in MongoDB: %d" % updates
-
-else:
-  print "- There is not new RPMs in the Node"
-
-
-
-print "- Checking database for Deleted RPMs"
-updates = merger(packages, mongo_packages, 'mongo', formatter(info_host['fqdn']))
-
-if updates > 0:
-  print "- Number of Updates in MongoDB: %d" % updates
-else:
-  print "- There is not RPMs erased in the Node"
 
 

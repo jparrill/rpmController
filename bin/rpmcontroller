@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+#####
+##" _____              _____         _           _ _         "
+##"| __  |___ _____   |     |___ ___| |_ ___ ___| | |___ ___ "
+##"|    -| . |     |  |   --| . |   |  _|  _| . | | | -_|  _|"
+##"|__|__|  _|_|_|_|  |_____|___|_|_|_| |_| |___|_|_|___|_|  "
+##"      |_|                                                 "
+##
+
+from rpmController import rpm_api, mongo_api, comparer
+
+info_host = {}
+packages = []
+rpms = rpm_api.Info()
+comp = comparer.Comparer()
+info_host, packages = rpms.catcher()
+
+print "- Checking database for New RPMs"
+
+mongo = mongo_api.Info()
+mongo_packages = mongo.get_packages(formatter(info_host['fqdn']))
+merged_packages, updates = comp.merger(packages, mongo_packages, 'rpm', comp.formatter(info_host['fqdn']))
+
+
+if merged_packages != [] and updates == 0:
+  ## Here we can log this entries for the following of the node ;)
+  mongo.collection_maker(comp.formatter(info_host['fqdn']), info_host, merged_packages)
+
+elif updates > 0:
+  print "- Number of Updates in MongoDB: %d" % updates
+
+else:
+  print "- There is not new RPMs in the Node"
+
+
+
+print "- Checking database for Deleted RPMs"
+updates = comp.merger(packages, mongo_packages, 'mongo', comp.formatter(info_host['fqdn']))
+
+if updates > 0:
+  print "- Number of Updates in MongoDB: %d" % updates
+else:
+  print "- There is not RPMs erased in the Node"
