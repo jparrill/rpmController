@@ -52,6 +52,7 @@ def check_all():
 args = arguments()
 
 if args.check and not args.find:
+  print "Checking RPMS:"
   check_all()
 
 elif args.find:
