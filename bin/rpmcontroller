@@ -55,8 +55,8 @@ args = parser.parse_args()
 if args.check and not args.find:
   check_all()
 
-elif:
-  args.find()
+elif args.find():
+  pass
 
 else:
   print "Method in construction..."
