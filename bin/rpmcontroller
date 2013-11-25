@@ -6,14 +6,14 @@ from os import path
 sys.path.append("../lib")
 from rpmController import rpm_api, mongo_api, comparer
 
-def call_all():
+def dinamic_call():
   rpms = rpm_api.Info()
   comp = comparer.Comparer()
   mongo = mongo_api.Info()
   return rpms, comp, mongo
 
 def check_all():
-  rpms, comp, mongo = call_all()
+  rpms, comp, mongo = dinamic_call()
   info_host = {}
   packages = []
   info_host, packages = rpms.catcher()
@@ -41,8 +41,6 @@ def check_all():
     print "- There is not RPMs erased in the Node"
 
 
-
-
 ## Arguments
 parser = argparse.ArgumentParser(prog='rpmController')
 parser.add_argument("-f", '--find', help="Pattern to search in MongoDB", type=str, metavar="pattern")
@@ -56,6 +54,7 @@ if args.check and not args.find:
   check_all()
 
 elif args.find():
+  print "Method in construction..."
   pass
 
 else:
