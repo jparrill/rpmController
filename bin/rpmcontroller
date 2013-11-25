@@ -12,6 +12,13 @@ def dinamic_call():
   mongo = mongo_api.Info()
   return rpms, comp, mongo
 
+def arguments():
+  parser = argparse.ArgumentParser(prog='rpmController')
+  parser.add_argument("-f", '--find', help="Pattern to search in MongoDB", type=str, metavar="pattern")
+  parser.add_argument("-c", '--check', help="Check if there are new rpms in node", default=True, action='store_true')
+  parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+  return parser.parse_args()
+
 def check_all():
   rpms, comp, mongo = dinamic_call()
   info_host = {}
@@ -42,18 +49,12 @@ def check_all():
 
 
 ## Arguments
-parser = argparse.ArgumentParser(prog='rpmController')
-parser.add_argument("-f", '--find', help="Pattern to search in MongoDB", type=str, metavar="pattern")
-parser.add_argument("-c", '--check', help="Check if there are new rpms in node", default=True, action='store_true')
-#parser.add_argument("--debug", help="Increase output verbosity")
-parser.add_argument('--version', action='version', version='%(prog)s 0.1')
-args = parser.parse_args()
-
+args = arguments()
 
 if args.check and not args.find:
   check_all()
 
-elif args.find():
+elif args.find:
   print "Method in construction..."
   pass
 
