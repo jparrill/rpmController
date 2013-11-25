@@ -7,7 +7,7 @@ setup(
     name='rpmController',
     version='0.1.0',
     url='https://pdihub.hi.inet/troitino/rpmControler',
-    license='GPLv2',
+    license='MIT',
     description='more control about your machine rpms',
     authors='Francisco Garcia Troitiño, Juan Manuel Parrilla',
     author_emails='troitino@tid.es, padajuan@gmail.com',
@@ -15,9 +15,10 @@ setup(
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split('\n'),
     classifiers=[
-        'Development Status :: 1 - Alpha',
+        'Development Status :: 1 - Beta',
+        'Environment :: Console',
         'Intended Audience :: DevOps',
-        'Operating System :: Redhat/CentOS',
+        'Operating System :: Redhat/CentOS/Fedora',
         'Programming Language :: Python',
     ]
 )

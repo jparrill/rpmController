@@ -4,10 +4,12 @@ import time
 import rpm
 
 class Info(object):
+  ## This class take the information of the rpms attacking to the RPM's api  and host information 
   def __init__(self):
     pass
 
   def rpm_getinfo(self):
+    ## Catch all rpm installed in the system only for CentOS/RedHat/Fedora
     rpm_collect = []
     rpm_struct = {}
     db = rpm.TransactionSet()
@@ -20,12 +22,14 @@ class Info(object):
       rpm_struct['date'] = package.sprintf("%{INSTALLTID:date}")
       rpm_struct['review_date'] = time.ctime(time.time())
       rpm_struct['deleted'] = 'false'
+      rpm_struct['ip'] = socket.gethostbyname(socket.gethostname())
       if rpm_struct not in rpm_collect:
         rpm_collect.append(rpm_struct.copy())
 
     return sorted(rpm_collect)
     
   def catcher(self):
+    ## Catch information of the node
     packages = []
     info_host = {}
     info_host['fqdn'] = socket.getfqdn()

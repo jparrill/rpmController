@@ -1,3 +1,5 @@
+import mongo_api
+
 class Comparer(object):
   def __init__(self):
     pass
@@ -79,6 +81,7 @@ class Comparer(object):
 
     elif method == 'mongo':
       updates = 0
+      mongo = mongo_api.Info()
       for mongo_rpm in mongo_packages:
         pkg_status = self.mongo_analize(mongo_rpm, rpm_packages)
         if pkg_status == '0':
@@ -90,7 +93,7 @@ class Comparer(object):
           ## the last parameter is to set true or false the deleted fliend in MongoDB
           try:
             print "** Updating package on MongoDB: %s" % mongo_rpm['name'] 
-            code = self.mongo.deleter(collection, mongo_rpm, 'true')
+            code = mongo.deleter(collection, mongo_rpm, 'true')
             updates += 1 
 
           except:
@@ -100,7 +103,7 @@ class Comparer(object):
         elif pkg_status == '3':
           ## RPM was erased and reinstalled
           print "** Updating package on MongoDB: %s" % mongo_rpm['name']
-          code = self.mongo.deleter(collection, mongo_rpm, 'false')
+          code = mongo.deleter(collection, mongo_rpm, 'false')
           updates += 1
 
       return updates   
