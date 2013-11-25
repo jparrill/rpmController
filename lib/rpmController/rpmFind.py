@@ -12,75 +12,88 @@ import codecs
 import sys
 import getopt
 import ConfigParser
+import socket
 
 
 # Para leer donde esta instalado el mongodb
 config = ConfigParser.RawConfigParser()
 config.read('/opt/pdi/rpmControler/rpmControler.ini')
 
-ip_mongo = config.get('mongo', 'ip')
-port_mongo = config.getint('mongo','port')
+ip_mongo = '127.0.0.1'
+port_mongo = 27017
 
 
+def find_collection():
+  connection = Connection(ip_mongo, port_mongo)
 
-def run(string, busqueda):
+  db = connection.rpmdb
 
+  
+  for collection_ in db.collection_names():
+    if collection_ != "system.indexes":
+      print collection_
+
+
+def find_fqdn(fqdn):
+
+  print "fqdn:",fqdn
+  #fqdn = socket.getfqdn()
+
+  #mongo = mongo_api.Info()
+  #db = mongo_api.mongo_con(mongo.ip_mongo, mongo.port_mongo, fqdn)
+  #db[collection].find({key:{'$regex':pattern}})
   #connect to mongodb
   
   connection = Connection(ip_mongo, port_mongo)
 
   # get database
 
-  db = connection.rpms_database
+  db = connection.rpmdb
 
   #get one collection
 
-  collection = db.rpms_collection
+  
+  #fqdn = socket.getfqdn()
+  #fqdn = fqdn.replace("-", "_")
+  #fqdn = fqdn.replace(".", "_")
 
-
-  info_pcs = db.info_hosts
-
-
-  rpms = db.rpms
+  rpms = db[fqdn]
  
-  id_=""
-
-  if busqueda == "IP":
-    #print "option: IP"
-    for host in info_pcs.find({"ips": string}):
-      print "id=%(_id)s id_=%(id_)s name=%(name)s ips=%(ips)s date=%(date)s system=%(system)s release=%(release)s version=%(version)s distribution=%(distribution)s" % host
-      id_=host["id_"]
-    for record in rpms.find({"id_": id_}):
-      # because record is a dict, we get you use lots of python magic
-      print "id=%(_id)s id_=%(id_)s name=%(rpm)s date_process=%(date_process)s date_installed=%(date_installed)s" % record
-  elif busqueda == "HOST":
-    #print "option: HOST"
-    for host in info_pcs.find({"name": string}):
-      print "id=%(_id)s id_=%(id_)s name=%(name)s ips=%(ips)s date=%(date)s system=%(system)s release=%(release)s version=%(version)s distribution=%(distribution)s" % host
-      id_=host["id_"]
-    for record in rpms.find({"id_": id_}):
-      # because record is a dict, we get you use lots of python magic
-      print "id=%(_id)s id_=%(id_)s name=%(rpm)s date_process=%(date_process)s date_installed=%(date_installed)s" % record
-  elif busqueda == "ONLYHOST":
-    for host in info_pcs.find({"name": string}):
-      print "id=%(_id)s id_=%(id_)s name=%(name)s ips=%(ips)s date=%(date)s system=%(system)s release=%(release)s version=%(version)s distribution=%(distribution)s" % host
-      id_=host["id_"]
-  elif busqueda == "ONLYRPM":
-    #print "option: ONLYRPM"
-    for host in info_pcs.find({"name": string}):
-      #print "id=%(_id)s id_=%(id_)s name=%(name)s ips=%(ips)s date=%(date)s system=%(system)s release=%(release)s version=%(version)s distribution=%(distribution)s" % host
-      id_=host["id_"]
-    for record in rpms.find({"id_": id_}):
-      # because record is a dict, we get you use lots of python magic
-      print "id=%(_id)s id_=%(id_)s name=%(rpm)s date_process=%(date_process)s date_installed=%(date_installed)s" % record
+  for host in rpms.find({"fqdn": fqdn}):
+    print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
+  for record in rpms.find({"deleted":{'$exists': True}}):
+    # because record is a dict, we get you use lots of python magic
+    print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record
   
 
-             
+def find_ip(ip):
+  print "ip:",ip
+  connection = Connection(ip_mongo, port_mongo)
+
+  # get database
+
+  db = connection.rpmdb
+
+  #get one collection
+
+  for test in db.collection_names():
+    print test
+
+  
+    rpms = db[test]
+ 
+    for host in rpms.find({"ip": ip, "SO_release":{'$exists': True}}):
+      print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
+    for record in rpms.find({"ip": ip, "deleted":{'$exists': True}}):
+      # because record is a dict, we get you use lots of python magic
+      print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record
+
+
 
 def main():
 
   try:
-    optsList, argsList = getopt.getopt(sys.argv[1:], "i:h:o:r:", ["ip=", "host=", "onlyhost", "onlyrpm"])
+    optsList, argsList = getopt.getopt(sys.argv[1:], "l:i:h:")
 
   except getopt.GetoptError, err:
     #Error handling for unknown or incorrect number of options
@@ -89,18 +102,18 @@ def main():
 
   #dependiendo del parametro hago un find u otro
 
+
   for opt, arg in optsList:
-    if opt in ('-i', '--ip'):
-        ip_find = arg
-        run(arg,"IP")
+    if opt in ('-l', '--list'):
+        find_collection()
     elif opt in ('-h', '--host'):
-        run(arg,"HOST")
-    elif opt in ('-o', '--onlyhost'):
-        run(arg,"ONLYHOST")
-    elif opt in ('-r', '--onlyrpm'):
-        run(arg,"ONLYRPM")
+        find_fqdn(arg)
+    elif opt in ('-i', '--ip'):
+        find_ip(arg)
     else:
         print "Unhandled option"
-        sys.exit(2)   
+        sys.exit(2)
+  
+
 
 main()
