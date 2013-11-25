@@ -36,9 +36,9 @@ class Info(object):
     info_host['ip'] = socket.gethostbyname(socket.gethostname())
     info_host['date'] = time.ctime(time.time())
     info_host['system'] = platform.system()
-    info_host['release'] = platform.release()
-    info_host['version'] = platform.version()
-    info_host['distribution'] = platform.dist()
+    info_host['SO_release'] = platform.release()
+    info_host['SO_version'] = platform.version()
+    info_host['SO_distribution'] = platform.dist()
     packages = self.rpm_getinfo()
 
     return info_host, packages
