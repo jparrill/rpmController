@@ -42,7 +42,9 @@ fi
 %install
 # copy gs-api project from the SVN repo
 [ -d $RPM_BUILD_ROOT%{_controller_dir} ] || mkdir -p $RPM_BUILD_ROOT%{_controller_dir}
+[ -d $RPM_BUILD_ROOT/usr/bin ] || mkdir -p $RPM_BUILD_ROOT/usr/bin
 cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
+ln -svf $RPM_BUILD_ROOT%{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
 
 # -------------------------------------------------------------------------------------------- #
 # post-install section:
@@ -54,9 +56,6 @@ if [ $? -ne 0 ]
 then
   echo "Error installing PiP dependencies.";
 fi
-
-ln -svf %{_controller_dir}/bin/rpmcontroller /usr/bin/rpmcontroller
-
 
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
