@@ -22,6 +22,15 @@ class Info(object):
     connection = Connection(ip, port)
     return connection[rpmdb]
 
+  def mongo_con_(self):
+    connection = Connection(self.ip_mongo, self.port_mongo)
+    return connection[self.db_mongo]
+
+  #def mongo_con(self, fqdn):
+  #  connection = Connection(self.ip_mongo, self.port_mongo)
+  #  db = connection[self.db_mongo]
+  #  return db[fqdn]
+
   def deleter(self, collection, rpm, status):
     ## Put deletef field of collection to true or false
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
@@ -49,3 +58,26 @@ class Info(object):
       packages.append(item) 
     db[collection].disconnect
     return packages
+
+  def print_collection(self, db_collection):
+    for collection_ in db_collection.collection_names():
+      if collection_ != "system.indexes":
+        print collection_
+
+  def print_info_host(self,fqdn):
+    db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
+    rpms=db[fqdn]
+    for host in rpms.find({"fqdn": "localhost.localdomain"}):
+      print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
+    for record in rpms.find({"deleted":{'$exists': True}}):
+      # because record is a dict, we get you use lots of python magic
+      print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record  
+
+  def print_info_rpms(self,fqdn,ip):
+    db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
+    rpms=db[fqdn]
+    for host in rpms.find({"ip": ip, "SO_release":{'$exists': True}}):
+      print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
+    for record in rpms.find({"ip": ip, "deleted":{'$exists': True}}):
+      # because record is a dict, we get you use lots of python magic
+      print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record
