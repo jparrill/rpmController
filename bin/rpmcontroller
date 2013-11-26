@@ -18,7 +18,7 @@ def arguments():
   parser = argparse.ArgumentParser(prog='rpmController')
   parser.add_argument("-f", '--find', help="Pattern to search in MongoDB", type=str, metavar="pattern")
   parser.add_argument("-c", '--check', help="Check if there are new rpms in node", default=True, action='store_true')
-  parser.add_argument("-d", '--debug', help="Debug Mode", default=True, action='store_true')
+  parser.add_argument("-d", '--debug', help="Debug Mode", default=False, action='store_true')
   parser.add_argument('--version', action='version', version='%(prog)s 0.1')
   return parser.parse_args()
 
@@ -48,63 +48,35 @@ def check_all():
     rpms, comp, mongo = dinamic_call()
 
   except:
-    logging.critical('Error making calls')
+    logging.critical('Error making calls rpmConrtoller Libraries')
     raise
 
   info_host = {}
   packages = []
-  try:
-    info_host, packages = rpms.catcher()
-
-  except:
-    logging.critical('Error Catching RPMs from the node')
-    raise
+  info_host, packages = rpms.catcher()
 
   print "- Checking database for New RPMs"
   logging.debug('Checking Database')
-  try:
-    mongo_packages = mongo.get_packages(comp.formatter(info_host['fqdn']))
-
-  except:
-    logging.critical('Error getting MongoDB packages of Node')
-    raise
-
-  try:
-    logging.debug('Merging RPMs from System to MongoDB')
-    merged_packages, updates = comp.merger(packages, mongo_packages, 'rpm', comp.formatter(info_host['fqdn']))
-
-  except:
-    logging.critical('Error Merging packages')
-
+  mongo_packages = mongo.get_packages(comp.formatter(info_host['fqdn']))
+  merged_packages, updates = comp.merger(packages, mongo_packages, 'rpm', comp.formatter(info_host['fqdn']))
 
   if merged_packages != [] and updates == 0:
     ## Here we can log this entries for the following of the node ;)
-    logging.debug('Database is empty, fullfilling')
     mongo.collection_maker(comp.formatter(info_host['fqdn']), info_host, merged_packages)
 
   elif updates > 0:
-    logging.debug('- Packages updated: %d', updates)
     print "- Number of Updates in MongoDB: %d" % updates
 
   else:
-    logging.debug('- There is not new RPMs in the Node')
     print "- There is not new RPMs in the Node"
 
   print "- Checking database for Deleted RPMs"
-  logging.debug('- Checking database for Deleted RPMs')
-  try:
-    logging.debug('Mergging updates with MongoDB')
-    updates = comp.merger(packages, mongo_packages, 'mongo', comp.formatter(info_host['fqdn']))
-
-  except:
-    logging.critical('Error mergging packages')
+  updates = comp.merger(packages, mongo_packages, 'mongo', comp.formatter(info_host['fqdn']))
 
   if updates > 0:
-    logging.debug('- Packages updated: %d', updates)
     print "- Number of Updates in MongoDB: %d" % updates
 
   else:
-    logging.debug('- There is not new RPMs in the Node')
     print "- There is not RPMs erased in the Node"
 
 
