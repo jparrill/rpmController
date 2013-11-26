@@ -27,6 +27,11 @@ This utility take control about the RPMs installed in X nodes and centralize the
 %prep
 rm -Rf $RPM_BUILD_ROOT/*
 
+%build
+# -------------------------------------------------------------------------------------------- #
+# install section:
+# -------------------------------------------------------------------------------------------- #
+%install
 # copy gs-api project from the SVN repo
 [ -d $RPM_BUILD_ROOT%{_controller_dir} ] || mkdir -p $RPM_BUILD_ROOT%{_controller_dir}
 cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
@@ -34,29 +39,21 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # clean up development-only files
 find $RPM_BUILD_ROOT -depth -name .git -exec rm -rf {} \;
 if [ $? -ne 0 ]
-then 
-	echo "Error cleaning GIT stuff.";
-fi
-
-%build
-
-
-# -------------------------------------------------------------------------------------------- #
-# install section:
-# -------------------------------------------------------------------------------------------- #
-# Install Zend project and Apache config file
-%install
-## Install all requirements.txt
-pip-python install %{_controller_dir}/requirements.txt
-if [ $? -ne 0 ]
-then 
-  echo "Error installing PiP dependencies.";
+then
+  echo "Error cleaning GIT stuff.";
 fi
 
 # -------------------------------------------------------------------------------------------- #
 # post-install section:
 # -------------------------------------------------------------------------------------------- #
 %post
+## Install all requirements.txt
+pip-python install %{_controller_dir}/requirements.txt
+if [ $? -ne 0 ]
+then
+  echo "Error installing PiP dependencies.";
+fi
+
 ln -s %{_controller_dir}/bin/rpmcontroller /usr/bin
 
 
