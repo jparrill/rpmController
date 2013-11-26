@@ -48,13 +48,13 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # -------------------------------------------------------------------------------------------- #
 %post
 ## Install all requirements.txt
-#pip-python install -r %{_controller_dir}/requirements.txt
+pip-python install -r %{_controller_dir}/requirements.txt
 if [ $? -ne 0 ]
 then
   echo "Error installing PiP dependencies.";
 fi
 
-ln -s %{_controller_dir}/bin/rpmcontroller /usr/bin
+[ -h /usr/bin/rpmcontroller ] || ln -s %{_controller_dir}/bin/rpmcontroller /usr/bin
 
 
 # -------------------------------------------------------------------------------------------- #
