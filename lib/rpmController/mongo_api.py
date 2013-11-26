@@ -32,6 +32,7 @@ class Info(object):
       connection = Connection(ip, port)
     except:
       logging.critical('Error Connecting to DB: %s:%d', ip, port)
+      print "Error connecting MongoDB"
       sys.exit(1)
 
     return connection[rpmdb]
@@ -59,6 +60,8 @@ class Info(object):
       db[collection].insert(packages)
     except:
       logging.error('Error Making new collection %s', collection)
+      print "Error Making new collection"
+      raise
     
   def get_packages(self, collection):
     ## Catch all packages of MongoDB collection
