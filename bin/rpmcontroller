@@ -5,6 +5,7 @@ import argparse
 import logging
 from os import path
 import os
+import socket
 sys.path.append("../lib")
 from rpmController import rpm_api, mongo_api, comparer
 
@@ -80,6 +81,42 @@ def check_all():
     print "- There is not RPMs erased in the Node"
 
 
+def is_valid_ipv4_address(address):
+    try:
+        socket.inet_pton(socket.AF_INET, address)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(address)
+        except socket.error:
+            return False
+        return address.count('.') == 3
+    except socket.error:  # not a valid address
+        return False
+
+    return True
+
+def find_collection():
+
+
+  mongo = mongo_api.Info()
+  db = mongo.mongo_con_()
+
+  mongo.print_collection(db)
+
+
+def find_fqdn(fqdn):
+  mongo = mongo_api.Info()
+  mongo.print_info_host(fqdn)
+
+
+
+def find_ip(ip):
+  mongo = mongo_api.Info()
+  db = mongo.mongo_con_()
+ 
+  for test in db.collection_names():
+    mongo.print_info_rpms(test,ip)
+
 ## Arguments
 args = arguments()
 log(args)
@@ -89,7 +126,12 @@ if args.check and not args.find:
   check_all()
 
 elif args.find:
-  print "Method in construction..."
+  if args.find == "list":
+    find_collection()
+  elif is_valid_ipv4_address(args.find):
+    find_ip(args.find)
+  else:
+    find_fqdn(args.find)
   pass
 
 else:
