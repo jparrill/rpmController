@@ -27,6 +27,13 @@ This utility take control about the RPMs installed in X nodes and centralize the
 %prep
 rm -Rf $RPM_BUILD_ROOT/*
 
+# clean up development-only files
+find %{_gitdir} -depth -name .git -exec rm -rf {} \;
+if [ $? -ne 0 ]
+then
+  echo "Error cleaning GIT stuff.";
+fi
+
 %build
 # -------------------------------------------------------------------------------------------- #
 # install section:
@@ -35,13 +42,6 @@ rm -Rf $RPM_BUILD_ROOT/*
 # copy gs-api project from the SVN repo
 [ -d $RPM_BUILD_ROOT%{_controller_dir} ] || mkdir -p $RPM_BUILD_ROOT%{_controller_dir}
 cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
-
-# clean up development-only files
-find $RPM_BUILD_ROOT -depth -name .git -exec rm -rf {} \;
-if [ $? -ne 0 ]
-then
-  echo "Error cleaning GIT stuff.";
-fi
 
 # -------------------------------------------------------------------------------------------- #
 # post-install section:
