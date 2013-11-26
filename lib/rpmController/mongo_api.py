@@ -1,9 +1,12 @@
 #!/usr/bin/python
 
 import socket
-from pymongo import Connection
 import ConfigParser
-#import os
+import logging
+import sys
+from pymongo import Connection
+
+
 
 class Info(object):
   ## Catch MongoDB data
@@ -19,7 +22,13 @@ class Info(object):
     self.db_mongo = config.get('mongo', 'database')
 
   def mongo_con(self, ip, port, rpmdb):
-    connection = Connection(ip, port)
+    try:
+      logging.debug('Trying to connect to: %s:%d', ip, port)
+      connection = Connection(ip, port)
+    except:
+      logging.critical('Error Connecting to DB: %s:%d', ip, port)
+      sys.exit(1)
+
     return connection[rpmdb]
 
   def mongo_con_(self):
