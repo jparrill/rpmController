@@ -24,7 +24,7 @@ def arguments():
   return parser.parse_args()
 
 def log(args):
-  LOG_FILE = '../log/rpmController.log'
+  LOG_FILE = '/var/log/rpmController.log'
   logging.getLogger('').handlers = []
   if not os.path.exists(LOG_FILE):
     open(LOG_FILE, 'a').close()
@@ -37,7 +37,7 @@ def log(args):
            level=logging.DEBUG)
   else:
     logging.basicConfig(
-           filename='../log/rpmController.log',
+           filename='/var/log/rpmController.log',
            format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s',
            level=logging.ERROR) 
 
