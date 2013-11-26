@@ -7,7 +7,7 @@ BuildRoot: %{_topdir}/BUILD/%{name}
 BuildArch: noarch
 Provides:  rpmcontroller
 Group: Application/M2M Global Services
-Requires: gcc python-devel pip-python
+Requires: gcc python-devel python-pip
 Distribution: Global Services
 Vendor: Telefónica I+D
 
