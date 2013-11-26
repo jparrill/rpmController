@@ -44,7 +44,6 @@ fi
 [ -d $RPM_BUILD_ROOT%{_controller_dir} ] || mkdir -p $RPM_BUILD_ROOT%{_controller_dir}
 [ -d $RPM_BUILD_ROOT/usr/bin ] || mkdir -p $RPM_BUILD_ROOT/usr/bin
 cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
-ln -svf $RPM_BUILD_ROOT%{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
 
 # -------------------------------------------------------------------------------------------- #
 # post-install section:
@@ -57,10 +56,17 @@ then
   echo "Error installing PiP dependencies.";
 fi
 
+ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
+
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #
 %preun
+if [ $1 == 0 ]; then
+  [ -h %{_controller_dir}/bin/rpmcontroller ] && unlink %{_controller_dir}/bin/rpmcontroller
+fi
+
+
 
 # -------------------------------------------------------------------------------------------- #
 # post-uninstall section:
