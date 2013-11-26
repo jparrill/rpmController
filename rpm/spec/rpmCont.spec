@@ -48,7 +48,7 @@ fi
 # -------------------------------------------------------------------------------------------- #
 %post
 ## Install all requirements.txt
-pip-python install -r %{_controller_dir}/requirements.txt
+#pip-python install -r %{_controller_dir}/requirements.txt
 if [ $? -ne 0 ]
 then
   echo "Error installing PiP dependencies.";
