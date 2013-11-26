@@ -56,17 +56,13 @@ then
   echo "Error installing PiP dependencies.";
 fi
 
-ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
-ln -svf %{_controller_dir}/lib/rpmController $RPM_BUILD_ROOT/usr/lib/rpmController
+echo "export PATH=$PATH:/opt/rpmcontroller/bin" >> $HOME/.bash_profile
+source $HOME/.bash_profile 
 
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #
 %preun
-if [ $1 == 0 ]; then
-  [ -h /usr/bin/rpmcontroller ] && unlink /usr/bin/rpmcontroller
-  [ -h /usr/lib/rpmController ] && unlink /usr/lib/rpmController
-fi
 
 
 
