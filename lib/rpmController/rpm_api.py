@@ -2,6 +2,7 @@ import platform
 import socket
 import time
 import rpm
+import logging
 
 class Info(object):
   ## This class take the information of the rpms attacking to the RPM's api  and host information 
@@ -12,8 +13,13 @@ class Info(object):
     ## Catch all rpm installed in the system only for CentOS/RedHat/Fedora
     rpm_collect = []
     rpm_struct = {}
-    db = rpm.TransactionSet()
-    rpm_packages = db.dbMatch()
+    try:
+      logging.debug('Getting information of installed RPM')
+      db = rpm.TransactionSet()
+      rpm_packages = db.dbMatch()
+    except:
+      logging.critical('Error getting information about rpms installed')
+      raise
 
     for package in rpm_packages:
       rpm_struct['name'] = package['name']

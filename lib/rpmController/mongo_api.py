@@ -60,13 +60,6 @@ class Info(object):
     except:
       logging.error('Error Making new collection %s', collection)
     
-  def finder(self, collection, key, pattern):
-    ## finder api 
-    info_host = {}
-    packages = []
-    db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
-    db[collection].find({key:{'$regex':pattern}})
-
   def get_packages(self, collection):
     ## Catch all packages of MongoDB collection
     packages = []
