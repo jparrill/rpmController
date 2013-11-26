@@ -40,19 +40,14 @@ class Info(object):
     connection = Connection(self.ip_mongo, self.port_mongo)
     return connection[self.db_mongo]
 
-  #def mongo_con(self, fqdn):
-  #  connection = Connection(self.ip_mongo, self.port_mongo)
-  #  db = connection[self.db_mongo]
-  #  return db[fqdn]
-
   def deleter(self, collection, rpm, status):
     ## Put deletef field of collection to true or false
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
     try:
-      logging.debug('modifying RPM in MongoDB: %s', rpm['name'])
+      logging.debug('modifying RPM in MongoDB: %s', rpm["name"])
       code = db[collection].update({"name":rpm["name"], "version":rpm["version"], "release":rpm["release"]}, {'$set': {"deleted": status}})
     except:
-      logging.critical('Error updating %s', rpm['name'])
+      logging.critical('Error updating %s', rpm["name"])
     return code
 
   def collection_maker(self, collection, info_host, packages):
@@ -85,6 +80,7 @@ class Info(object):
     except:
       logging.error('Error getting packages')
       raise
+
     return packages
 
   def print_collection(self, db_collection):
