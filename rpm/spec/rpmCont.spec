@@ -55,7 +55,7 @@ then
   echo "Error installing PiP dependencies.";
 fi
 
-ln -sf %{_controller_dir}/bin/rpmcontroller /usr/bin/rpmcontroller
+ln -svf %{_controller_dir}/bin/rpmcontroller /usr/bin/rpmcontroller
 
 
 # -------------------------------------------------------------------------------------------- #
