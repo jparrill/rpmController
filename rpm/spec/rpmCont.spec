@@ -57,7 +57,7 @@ then
 fi
 
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
-ln -svf %{_controller_dir}/lib/rpmcontroller $RPM_BUILD_ROOT/usr/lib/rpmcontroller
+ln -svf %{_controller_dir}/lib/rpmController $RPM_BUILD_ROOT/usr/lib/rpmcontroller
 
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
