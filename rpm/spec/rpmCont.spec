@@ -62,13 +62,12 @@ ln -svf %{_controller_dir}/bin/rpmcontroller /usr/bin/rpmcontroller
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #
 %preun
-
+unlink /usr/bin/rpmcontroller
 
 # -------------------------------------------------------------------------------------------- #
 # post-uninstall section:
 # -------------------------------------------------------------------------------------------- #
 %postun
-unlink /usr/bin/rpmcontroller
 exit 0
 	
 		
