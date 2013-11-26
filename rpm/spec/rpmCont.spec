@@ -56,9 +56,6 @@ then
   echo "Error installing PiP dependencies.";
 fi
 
-echo "export PATH=$PATH:/opt/rpmcontroller/bin" >> $HOME/.bash_profile
-source $HOME/.bash_profile 
-
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #

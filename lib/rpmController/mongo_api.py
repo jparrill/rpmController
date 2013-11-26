@@ -18,7 +18,7 @@ class Info(object):
     config = ConfigParser.RawConfigParser()
     try:
       logging.debug('Reading configuration')
-      config.read('/opt/rpmcontroller/conf/rpmController.ini')
+      config.read('../conf/rpmController.ini')
     except:
       logging.critital('Error reading config file')
 
