@@ -88,7 +88,8 @@ class Info(object):
       print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
     for record in rpms.find({"deleted":{'$exists': True}}):
       # because record is a dict, we get you use lots of python magic
-      print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record  
+      # print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record  
+      print "name=%(name)s-%(version)s-%(release)s date=%(date)s review_date=%(review_date)s deleted=%(deleted)s" % record  
 
   def print_info_rpms(self, fqdn, ip):
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
@@ -97,4 +98,5 @@ class Info(object):
       print "id=%(_id)s fqdn=%(fqdn)s system=%(system)s release=%(SO_release)s version=%(SO_version)s date=%(date)s distribution=%(SO_distribution)s" % host
     for record in rpms.find({"ip": ip, "deleted":{'$exists': True}}):
       # because record is a dict, we get you use lots of python magic
-      print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record
+      #print "id=%(_id)s date=%(date)s version=%(version)s review_date=%(review_date)s name=%(name)s deleted=%(deleted)s release=%(release)s" % record
+      print "name=%(name)s-%(version)s-%(release)s date=%(date)s review_date=%(review_date)s deleted=%(deleted)s" % record  

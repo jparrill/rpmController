@@ -96,11 +96,8 @@ def is_valid_ipv4_address(address):
     return True
 
 def find_collection():
-
-
   mongo = mongo_api.Info()
   db = mongo.mongo_con_()
-
   mongo.print_collection(db)
 
 
