@@ -75,8 +75,6 @@ exit 0
 rm -rf $RPM_BUILD_ROOT/*
 
 %files
-%defattr(755)
-
 # Specify config file
 %config %{_controller_dir}/conf/rpmController.ini
 
