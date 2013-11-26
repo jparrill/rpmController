@@ -75,6 +75,7 @@ exit 0
 rm -rf $RPM_BUILD_ROOT/*
 
 %files
+%{_controller_dir}/*
 # Specify config file
 %config %{_controller_dir}/conf/rpmController.ini
 
