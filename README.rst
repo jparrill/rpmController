@@ -34,13 +34,13 @@ Installation
 ------------
 
 How to install module:
-``sh``::
+````::
 
     git clone git@pdihub.hi.inet:troitino/rpmControler.git
 
 or:
 
-``sh``::
+````::
 
    yum install rpmController
 
