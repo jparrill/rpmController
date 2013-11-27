@@ -1,21 +1,26 @@
+==============
 RPM Controller
-=========
+==============
 
 RPM Controller is a utillity that take control of all RPM's installed, erased and updated in the machine, this information goes to a central MongoDB Node
 
+-------
 Version
-----
+-------
 
 1.0
 
+-------
 Status:
 -------
 
 Rmp Generation: |rpm_generation|
+
 .. |rpm_generation| image:: http://10.95.11.166/jenkins/job/RE-rpm_controller-GenRPM/badge/icon
 
+----
 Tech
------------
+----
 
 RPM Controller use this technologies:
 
@@ -24,6 +29,7 @@ RPM Controller use this technologies:
 * [pymongo] - Great module that talks with MongoDB
 * [argparse] - Argument parser Module
 
+------------
 Installation
 --------------
 How to install module:
@@ -45,9 +51,9 @@ yum install rpmController
  port = 27017      --> Port of MongoDB Node
  database = rpmdb  --> Database Name
 ```
-
+---------
 Execution
---------------
+---------
 By default RPM Controller search RPMs in the system and registry in a MongoDB
 * rpmcontroller --> Search rpms and take it to MongoDB
 * rpmcontroller -f <pattern> --> Search RPMs in MongoDB
@@ -63,9 +69,9 @@ Optional arguments:
   -d, --debug           Debug Mode
   --version             show program's version number and exit
 ```
-
+-------
 License
-----
+-------
 
 MIT
 
