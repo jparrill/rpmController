@@ -48,12 +48,12 @@ cnfigure file:
 
 * conf/rpmController.ini
 
-```sh
-[mongo]
- ip = 127.0.0.1    --> IP of MongoDB Node
- port = 27017      --> Port of MongoDB Node
- database = rpmdb  --> Database Name
-```
+
+  [mongo]
+    ip = 127.0.0.1    --> IP of MongoDB Node
+    port = 27017      --> Port of MongoDB Node
+    database = rpmdb  --> Database Name
+
 ---------
 Execution
 ---------
@@ -65,15 +65,15 @@ By default RPM Controller search RPMs in the system and registry in a MongoDB
 
 Help:
 
-```sh
-Optional arguments:
-  -h, --help            show this help message and exit
-  -f pattern, --find pattern
-                        Pattern to search in MongoDB
-  -c, --check           Check if there are new rpms in node
-  -d, --debug           Debug Mode
-  --version             show program's version number and exit
-```
+
+  Optional arguments:
+    -h, --help            show this help message and exit
+    -f pattern, --find pattern
+                          Pattern to search in MongoDB
+    -c, --check           Check if there are new rpms in node
+    -d, --debug           Debug Mode
+    --version             show program's version number and exit
+
 -------
 License
 -------
@@ -82,9 +82,9 @@ MIT
 
 *Free Software, Hell Yeah!*
 
-[Juan Manuel Parrilla]: juanmanuel.parrilla@amaris.com
-[@kerbeross]: http://twitter.com/@kerbeross
-[Francisco García Troitiño]: troitino@tid.es
-[1]: git@pdihub.hi.inet:troitino/rpmControler.git
-[Pymongo]: https://github.com/mongodb/mongo-python-driver
-[Argparse]: https://code.google.com/p/argparse
+  [Juan Manuel Parrilla]: juanmanuel.parrilla@amaris.com
+  [@kerbeross]: http://twitter.com/@kerbeross
+  [Francisco García Troitiño]: troitino@tid.es
+  [1]: git@pdihub.hi.inet:troitino/rpmControler.git
+  [Pymongo]: https://github.com/mongodb/mongo-python-driver
+  [Argparse]: https://code.google.com/p/argparse
