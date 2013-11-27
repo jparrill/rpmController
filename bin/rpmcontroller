@@ -1,0 +1,140 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+import logging
+from os import path
+import os
+import socket
+from os.path import realpath, dirname
+
+def path_finder():
+  file_path = dirname(realpath(__file__))
+  sys.path.append(file_path + "/../lib")
+
+def dinamic_call():
+  rpms = rpm_api.Info()
+  comp = comparer.Comparer()
+  mongo = mongo_api.Info()
+  return rpms, comp, mongo
+
+def arguments():
+  parser = argparse.ArgumentParser(prog='rpmController')
+  parser.add_argument("-f", '--find', help="Pattern to search in MongoDB", type=str, metavar="pattern")
+  parser.add_argument("-c", '--check', help="Check if there are new rpms in node", default=True, action='store_true')
+  parser.add_argument("-d", '--debug', help="Debug Mode", default=False, action='store_true')
+  parser.add_argument('--version', action='version', version='%(prog)s 0.1')
+  return parser.parse_args()
+
+def log(args):
+  LOG_FILE = '/var/log/rpmController.log'
+  logging.getLogger('').handlers = []
+  if not os.path.exists(LOG_FILE):
+    open(LOG_FILE, 'a').close()
+
+  if args.debug:
+    print "Debug Mode Activated"
+    logging.basicConfig(
+           filename=LOG_FILE,
+           format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s', 
+           level=logging.DEBUG)
+  else:
+    logging.basicConfig(
+           filename='/var/log/rpmController.log',
+           format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s',
+           level=logging.ERROR) 
+
+  logging.info('RPM Controller Started')
+
+def check_all():
+  try:
+    logging.debug('Charging libraries in memory')
+    rpms, comp, mongo = dinamic_call()
+
+  except:
+    logging.critical('Error making calls rpmConrtoller Libraries')
+    raise
+
+  info_host = {}
+  packages = []
+  info_host, packages = rpms.catcher()
+
+  print "- Checking database for New RPMs"
+  logging.debug('Checking Database')
+  mongo_packages = mongo.get_packages(comp.formatter(info_host['fqdn']))
+  merged_packages, updates = comp.merger(packages, mongo_packages, 'rpm', comp.formatter(info_host['fqdn']))
+
+  if merged_packages != [] and updates == 0:
+    ## Here we can log this entries for the following of the node ;)
+    mongo.collection_maker(comp.formatter(info_host['fqdn']), info_host, merged_packages)
+
+  elif updates > 0:
+    print "- Number of Updates in MongoDB: %d" % updates
+
+  else:
+    print "- There is not new RPMs in the Node"
+
+  print "- Checking database for Deleted RPMs"
+  updates = comp.merger(packages, mongo_packages, 'mongo', comp.formatter(info_host['fqdn']))
+
+  if updates > 0:
+    print "- Number of Updates in MongoDB: %d" % updates
+
+  else:
+    print "- There is not RPMs erased in the Node"
+
+
+def is_valid_ipv4_address(address):
+    try:
+        socket.inet_pton(socket.AF_INET, address)
+    except AttributeError:  # no inet_pton here, sorry
+        try:
+            socket.inet_aton(address)
+        except socket.error:
+            return False
+        return address.count('.') == 3
+    except socket.error:  # not a valid address
+        return False
+
+    return True
+
+def find_collection():
+  mongo = mongo_api.Info()
+  db = mongo.mongo_con_()
+  mongo.print_collection(db)
+
+
+def find_fqdn(fqdn):
+  mongo = mongo_api.Info()
+  mongo.print_info_host(fqdn)
+
+
+
+def find_ip(ip):
+  mongo = mongo_api.Info()
+  db = mongo.mongo_con_()
+ 
+  for test in db.collection_names():
+    mongo.print_info_rpms(test,ip)
+
+## Arguments
+args = arguments()
+log(args)
+path_finder()
+from rpmController import rpm_api, mongo_api, comparer
+
+if args.check and not args.find:
+  print "Checking RPMS:"
+  check_all()
+
+elif args.find:
+  if args.find == "list":
+    find_collection()
+  elif is_valid_ipv4_address(args.find):
+    find_ip(args.find)
+  else:
+    find_fqdn(args.find)
+  pass
+
+else:
+  print "Method in construction..."
