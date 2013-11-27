@@ -82,14 +82,14 @@ MIT
 
 *Free Software, Hell Yeah!*
 
-  [Juan Manuel Parrilla]: juanmanuel.parrilla@amaris.com
+[Juan Manuel Parrilla]: juanmanuel.parrilla@amaris.com
 
-  [@kerbeross]: http://twitter.com/@kerbeross
+[@kerbeross]: http://twitter.com/@kerbeross
 
-  [Francisco García Troitiño]: troitino@tid.es
+[Francisco García Troitiño]: troitino@tid.es
 
-  [1]: git@pdihub.hi.inet:troitino/rpmControler.git
+[1]: git@pdihub.hi.inet:troitino/rpmControler.git
 
-  [Pymongo]: https://github.com/mongodb/mongo-python-driver
-  
-  [Argparse]: https://code.google.com/p/argparse
+[Pymongo]: https://github.com/mongodb/mongo-python-driver
+
+[Argparse]: https://code.google.com/p/argparse
