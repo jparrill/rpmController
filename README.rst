@@ -31,7 +31,8 @@ RPM Controller use this technologies:
 
 ------------
 Installation
---------------
+------------
+
 How to install module:
 ```sh
 git clone git@pdihub.hi.inet:troitino/rpmControler.git
@@ -41,7 +42,9 @@ or:
 yum install rpmController
 ```
 
-##### Configure file:
+--------------
+cnfigure file:
+--------------
 
 * conf/rpmController.ini
 
@@ -54,12 +57,14 @@ yum install rpmController
 ---------
 Execution
 ---------
+
 By default RPM Controller search RPMs in the system and registry in a MongoDB
 * rpmcontroller --> Search rpms and take it to MongoDB
 * rpmcontroller -f <pattern> --> Search RPMs in MongoDB
 * debug mode --> log all actions in /var/log/rpmcontroller.log (Default deactivated)
 
 Help:
+
 ```sh
 Optional arguments:
   -h, --help            show this help message and exit
