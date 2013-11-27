@@ -71,7 +71,3 @@ MIT
   [1]: git@pdihub.hi.inet:troitino/rpmControler.git
   [Pymongo]: https://github.com/mongodb/mongo-python-driver
   [Argparse]: https://code.google.com/p/argparse
-  
-  
-    
->>>>>>> test/concept
