@@ -14,7 +14,7 @@ Version
 Status:
 -------
 
-Rmp Generation: |rpm_generation|
+Rpm Generation: |rpm_generation|
 
 .. |rpm_generation| image:: http://10.95.11.166/jenkins/job/RE-rpm_controller-GenRPM/badge/icon
 
