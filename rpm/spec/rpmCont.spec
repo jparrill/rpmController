@@ -56,11 +56,15 @@ then
   echo "Error installing PiP dependencies.";
 fi
 
+ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
+
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #
 %preun
-
+if [ $1 == 0 ]; then
+  [ -h /usr/bin/rpmcontroller ] && unlink /usr/bin/rpmcontroller
+fi
 
 
 # -------------------------------------------------------------------------------------------- #

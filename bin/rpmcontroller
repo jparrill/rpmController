@@ -6,8 +6,11 @@ import logging
 from os import path
 import os
 import socket
-sys.path.append("../lib")
-from rpmController import rpm_api, mongo_api, comparer
+from os.path import realpath, dirname
+
+def path_finder():
+  file_path = dirname(realpath(__file__))
+  sys.path.append(file_path + "/../lib")
 
 def dinamic_call():
   rpms = rpm_api.Info()
@@ -117,6 +120,8 @@ def find_ip(ip):
 ## Arguments
 args = arguments()
 log(args)
+path_finder()
+from rpmController import rpm_api, mongo_api, comparer
 
 if args.check and not args.find:
   print "Checking RPMS:"

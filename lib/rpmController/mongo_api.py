@@ -5,7 +5,7 @@ import ConfigParser
 import logging
 import sys
 from pymongo import Connection
-
+from os.path import realpath, dirname
 
 
 class Info(object):
@@ -15,10 +15,11 @@ class Info(object):
 
   def get_config(self):
     ## Catch config from config file
+    file_path = dirname(realpath(__file__))
     config = ConfigParser.RawConfigParser()
     try:
       logging.debug('Reading configuration')
-      config.read('../conf/rpmController.ini')
+      config.read(file_path + '/../../conf/rpmController.ini')
     except:
       logging.critital('Error reading config file')
 
