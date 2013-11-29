@@ -10,7 +10,7 @@ Group: Application/M2M Global Services
 Requires: gcc python-pip
 Distribution: Global Services
 Vendor: Telefónica I+D
-
+requires: python26-argparse, python26-pymongo
 
 %description
 This utility take control about the RPMs installed in X nodes and centralize the information in a MongoDB node.
@@ -50,19 +50,19 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # -------------------------------------------------------------------------------------------- #
 %post
 ## Install all requirements.txt
-version_RH=`lsb_release -i -r | grep Release | cut -d':' -f2  | cut -d'.' -f1  |xargs echo |  tr -d ' '`
-if [ $version_RH == '6' ]
-then
-    pip-python install -r %{_controller_dir}/requirements.txt
-    
-else
-    pip install -r %{_controller_dir}/requirements.txt
-fi
-
-if [ $? -ne 0 ]
-then
-      echo "Error installing PiP dependencies.";
-fi
+#version_RH=`lsb_release -i -r | grep Release | cut -d':' -f2  | cut -d'.' -f1  |xargs echo |  tr -d ' '`
+#if [ $version_RH == '6' ]
+#then
+#    pip-python install -r %{_controller_dir}/requirements.txt
+#    
+#else
+#    pip install -r %{_controller_dir}/requirements.txt
+#fi
+#
+#if [ $? -ne 0 ]
+#then
+#      echo "Error installing PiP dependencies.";
+#fi
 
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
 

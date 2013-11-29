@@ -1,0 +1,8 @@
+## YAML Template.
+---
+rpmcontroller_common:
+    redis_version: '2.6.4-1.el5.remi'
+    node_version: '0.6.18-1.el5.centos'
+    npm_version: '1.1.19-1.el5.centos'
+
+

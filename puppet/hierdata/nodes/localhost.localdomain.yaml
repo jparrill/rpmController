@@ -1,0 +1,4 @@
+## YAML Template.
+---
+rpmcontroller:
+  path_to_repo_rpmcontroller: http://artifacts.hi.inet/others/rpmControler/

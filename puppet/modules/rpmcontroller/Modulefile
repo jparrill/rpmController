@@ -1,0 +1,10 @@
+name    'rpmcontroller'
+version '0.0.1'
+source 'Instala el rpmcontroller'
+author 'troitino@tid.es'
+license 'TID'
+summary ''
+description ''
+project_page ''
+
+
