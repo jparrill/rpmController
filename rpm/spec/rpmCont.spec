@@ -65,7 +65,7 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 #fi
 
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
-ln -svf %{_controller_dir}/conf/cron/rpmController $RPM_BUILD_ROOT/etc/con.d/rpmController
+ln -svf %{_controller_dir}/conf/cron/rpmController $RPM_BUILD_ROOT/etc/cron.d/rpmController
 
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
