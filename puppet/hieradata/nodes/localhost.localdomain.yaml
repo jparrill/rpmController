@@ -1,5 +1,5 @@
 ## YAML Template.
 ---
-path_to_repo_rpmcontroller: http://artifacts.hi.inet/others/rpmControler/
+path_to_repo_rpmcontroller: http://artifacts.hi.inet/others/rpmController/6.X/x86_64/
 ip: ci-rmtest.hi.inet
 port: 27017
