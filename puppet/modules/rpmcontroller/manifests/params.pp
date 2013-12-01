@@ -4,15 +4,10 @@ class rpmcontroller::params {
       fail("Use of private class ${name} by ${caller_module_name}")
     }
 
-    $rpmcontroller_env=hiera('rpmcontroller')
-	  $rpmcontroller_common_env=hiera('rpmcontroller_common')
-
-
-
-    $path_to_repo_rpmcontroller=$rpmcontroller_env["path_to_repo_rpmcontroller"]
-    $ip=$rpmcontroller_env["ip"]
-    $port=$rpmcontroller_env["port"]
-    $database=$rpmcontroller_common_env["databse"]
-    $path_to_config=$rpmcontroller_common_env["path_to_config"]
+    $path_to_repo_rpmcontroller=hiera('path_to_repo_rpmcontroller','http://artifacts.hi.inet/others/rpmControler/')
+    $ip=hiera('ip','ci-rmtest.hi.inet')
+    $port=hiera(port','27017')
+    $database=hiera(databse','rpmdb')
+    $path_to_config=hiera(path_to_config','/opt/rpmcontroller/conf/rpmController.ini')
 
 }
