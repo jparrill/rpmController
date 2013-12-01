@@ -13,10 +13,9 @@ class rpmcontroller::config inherits rpmcontroller::params{
     
     
     
-	  file { 'Default_ftp':
+	  file { 'config_rpmcontroler':
 	    ensure 	=> file,
-		  path	=> $path_to_ftp,
-		  #require => Class['fas3::packages'],
-		  content => template('fas3/Default_ftp.erb'),    
+		  path	=> $path_to_config,
+		  content => template('rpmcontroller/rpmController.erb'),    
     }
 }

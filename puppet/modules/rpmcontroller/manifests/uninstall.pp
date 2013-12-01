@@ -1,5 +1,5 @@
 
-class fas3::uninstall inherits fas3::params {
+class rpmcontroller::uninstall inherits rpmcontroller::params {
 
 
   Package{
@@ -10,29 +10,26 @@ class fas3::uninstall inherits fas3::params {
     ensure => absent
   }
   
-  notify {"Cambio hecho por paco":}
+  
 
-  notify {"WARNING: Uninstalling the module fas3":}
+  notify {"WARNING: Uninstalling the module rpmcontroller":}
   ->
   #Cuidado: No es un servicio esta en el cron
-  service { 'm2m-fas3':
+  service { 'rpmcontroller':
     ensure    => stopped,
     enable    => false,
   }
   ->
-  package { 'm2m-fas3':}
+  package { 'rpmcontroller':}
   ->
-  file { 'Default_ftp':
-    path  => $path_to_ftp,
-  }
+  file { 'config_rpmcontroler':
+      path  => $path_to_config,
   ->
-  file { 'Default_generatefas3file':
-    path	=> $path_to_fas3file,
-  }
+  file { 'contrab_rpmcontroler':
+      path  => '/etc/cron.hourly/rpmController',
   ->
-  # en vez de hacer un yumrepo repogeneral ensure absent borra el fichero directamente.
-  file { 'repogeneral':
-    path  => '/etc/yum.repos.d/repogeneral.repo',
+  file { 'repo_rpmcontroller':
+    path  => '/etc/yum.repos.d/repo_rpmcontroller.repo',
   }
   ->
   exec { 'yum-clean-expire-cache':

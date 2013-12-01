@@ -12,22 +12,18 @@ define valor ($valor){
 }
 
 define error {
-  fail ("Variable ${name} no definida en: /etc/facter/facter.b/facter_smartM2M.yaml")
+  fail ("Variable ${name} no definida en: /etc/facter/facter.b/facter_rpmcontroller.yaml")
 }
 
 define warning{
-  warning ("Variable ${name} no definida en: /etc/facter/facter.b/facter_smartM2M.yaml")
+  warning ("Variable ${name} no definida en: /etc/facter/facter.b/facter_rpmcontroller.yaml")
   warning ("Se asume que su valor es: true")
 }
 
-if $::version_smartm2m == undef
+if $::version_rpmcontroller == undef
 {
   error{"version_smartm2m":}
 }
-#else 
-#{
-#  valor{'version_smartm2m': valor => $::version_smartm2m}
-#}
 
 if $::installation_mode == undef
 {
@@ -38,14 +34,6 @@ if $::installation_mode == undef
 #  valor{'installation_mode': valor => $::installation_mode}
 #}
 
-if $::smip == undef
-{
-  error{"smip":}
-}
-#else 
-#{
-#  valor{'smip': valor => $::smip}
-#}
 
 case $::puppet_manage_services {
     'yes': 
@@ -120,9 +108,8 @@ notify { "Variables":
     VARIABLES:
     ##########
  
-    \n version_smartm2m: ${::version_smartm2m} 
+    \n version_smartm2m: ${::version_rpmcontroller} 
     \n installation_mode: ${::installation_mode} 
-    \n smip: ${::smip} 
     \n manage_services: ${manage_services} 
     \n manage_packages: ${manage_packages} 
     \n manage_config: ${manage_config}

@@ -6,8 +6,8 @@ class rpmcontroller::packages inherits rpmcontroller::params {
 
    
   
-  yumrepo { 'repogeneral':
-    descr    => 'Repo general de M2M Portal',
+  yumrepo { 'repo_rpmcontroller':
+    descr    => 'Repo general del rpmcontroller',
     enabled  => 1,
     gpgcheck => 0,
     baseurl  => $path_to_repo_rpmcontroller,
@@ -16,7 +16,7 @@ class rpmcontroller::packages inherits rpmcontroller::params {
 
   package { 'rpmcontroller':
     ensure  => latest,
-    require => Yumrepo['repogeneral'],
+    require => Yumrepo['repo_rpmcontroller'],
   }
   
 }

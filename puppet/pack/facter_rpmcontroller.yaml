@@ -6,7 +6,7 @@
   ## smip: '1' --> Only have Smip permissions  
   ## smip: '2' --> Mixed, Default permissions and Smip permissions (ONLY FOR DEVELOPMENT)
   ###
-  version_smartm2m: '2.2.0'
+  version_rpmcontroller: '1.0.0'
   installation_mode: 'rollforward'
   #installation_mode: 'rollback'
   smip: '0'

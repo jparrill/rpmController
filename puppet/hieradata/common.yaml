@@ -1,0 +1,5 @@
+## YAML Template.
+---
+rpmcontroller_common:
+    database: rpmdb
+    path_to_config: /opt/rpmcontroller/conf/rpmController.ini
