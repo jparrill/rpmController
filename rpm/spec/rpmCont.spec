@@ -47,11 +47,11 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # -------------------------------------------------------------------------------------------- #
 %post
 %if 0%{?rhel}  >= 5 && 0%{?rhel}  <= 6
-  print 0%{?rhel}
+  echo 0%{?rhel}
   %{Requires: python26, python26-distribute, python26-argparse}
   easy_install-2.6 pymongo
 %else
-  print 0%{?rhel}
+  echo 0%{?rhel}
   %{Requires: python >= 2.6.6, python-argparse, python-pymongo}
 %endif
 
