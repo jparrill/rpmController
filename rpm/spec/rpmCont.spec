@@ -48,17 +48,19 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # -------------------------------------------------------------------------------------------- #
 %post
 %if 0%{?rhel}  >= 5 && 0%{?rhel}  <= 6
-%{Requires: python26, python26-distribute}
-for package in `cat %{_controller_dir}/requirements.txt`:
-do
-easy_install-2.6 $package
-done
+  %{Requires: python26, python26-distribute}
+  echo "Ussing easy_install-2.6"
+  for package in `cat %{_controller_dir}/requirements.txt`:
+  do
+    easy_install-2.6 $package
+  done
 %else
-%{Requires: python >= 2.6.6}
-for package in `cat %{_controller_dir}/requirements.txt`:
-do
-easy_install $package
-done
+  %{Requires: python >= 2.6.6}
+  echo "Ussing easy_install"
+  for package in `cat %{_controller_dir}/requirements.txt`:
+  do
+    easy_install $package
+  done
 %endif
 
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
