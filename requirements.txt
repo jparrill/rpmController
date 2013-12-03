@@ -1,2 +1,2 @@
 pymongo==2.6.3
-argparse
+argparse==1.2.1
