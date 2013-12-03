@@ -48,20 +48,10 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # -------------------------------------------------------------------------------------------- #
 %post
 %if 0%{?rhel}  >= 5 && 0%{?rhel}  <= 6
-  %{Requires: python26, python26-distribute}
-  echo "Ussing easy_install-2.6"
-  for package in `cat %{_controller_dir}/requirements.txt`:
-  do
-    echo $package
-    easy_install-2.6 $package
-  done
+  %{Requires: python26, python26-distribute, python26-argparse}
+  easy_install-2.6 pymongo
 %else
-  %{Requires: python >= 2.6.6}
-  echo "Ussing easy_install"
-  for package in `cat %{_controller_dir}/requirements.txt`:
-  do
-    easy_install $package
-  done
+  %{Requires: python >= 2.6.6, python-argparse, python-pymongo}
 %endif
 
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
