@@ -47,7 +47,7 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # post-install section:
 # -------------------------------------------------------------------------------------------- #
 %post
-%if 0%{?rhel}  == 5
+%if 0%{?rhel}  >= 5 and 0%{?rhel}  <= 6
 %{Requires: python26, python26-distribute}
 for package in `cat %{_controller_dir}/requirements.txt`:
 do
