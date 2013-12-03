@@ -14,27 +14,35 @@ SPECS_DIR=$M2M_APP_DIR/rpm/spec
 #Data parameters
 VERSION=$1
 REVISION=$2
+DIST=$3
 
 RPM_DIR=$(rpm --eval '%{_rpmdir}')
 
 m2m_create_rpm () {
-        if [ -n $1 ];then
-                 eval "rpmbuild -ba $1 -D \"_gs_version $VERSION\" -D \"_gs_revision $REVISION\" -D \"_gitdir $GIT_DIR\" $2";
-        fi
-        if [ $? -ne 0 ]
-        then
-                echo "Error creating RPM from $1. Error $?"
-                echo "Extra data: $2"
-                return 1;
-        fi;
+    if [ -n $1 ];then
+             eval "rpmbuild -ba $1 -D \"_gs_version $VERSION\" -D \"_gs_revision $REVISION\" -D \"_gitdir $GIT_DIR\" $2";
+    fi
+    if [ $? -ne 0 ]
+    then
+            echo "Error creating RPM from $1. Error $?"
+            echo "Extra data: $2"
+            return 1;
+    fi;
 }
 
 create_rpm_controller () {
-        echo "Creating RPM of RPM Controller..."
-        m2m_create_rpm $SPECS_DIR/rpmCont.spec
-        if [ $? -eq 0 ];then
-                echo "RPM Conrtoller packed!"
-        fi;
+    echo "Creating RPM of RPM Controller..."
+    if [ $DIST == "5" ];then
+        echo "Making RHEL 5 Version"
+        m2m_create_rpm $SPECS_DIR/rpmCont_rhel5.spec
+    else
+        echo "Making RHEL 6 Version"
+        m2m_create_rpm $SPECS_DIR/rpmCont_rhel6.spec
+    fi
+
+    if [ $? -eq 0 ];then
+            echo "RPM Conrtoller packed!"
+    fi;
 }
 
 create_rpm_controller

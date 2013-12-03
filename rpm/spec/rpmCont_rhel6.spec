@@ -1,17 +1,18 @@
 Summary: One RPM Controller to rule them all
 Name: rpmcontroller
 Version: %{_gs_version}
-Release: %{_gs_revision}
+Release: %{_gs_revision}.el6
 License: MIT
 BuildRoot: %{_topdir}/BUILD/%{name}
 BuildArch: noarch
 Provides:  rpmcontroller
 Group: Application/M2M Global Services
 Distribution: Global Services
+Requires: python >= 2.6.6, python-setuptools
 Vendor: Telefónica I+D
 
 %description
-This utility take control about the RPMs installed in X nodes and centralize the information in a MongoDB node.
+This utility take control about the RPMs installed in the node and centralize the information in a MongoDB node.
 
 %define _controller_dir /opt/rpmcontroller
 
@@ -46,15 +47,11 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # post-install section:
 # -------------------------------------------------------------------------------------------- #
 %post
-%if $("facter operatingsystemmajrelease") == 5
-  %{Requires: python26, python26-distribute, python26-argparse}
-  easy_install-2.6 pymongo
-%else
-  %{Requires: python >= 2.6.6, python-argparse, python-pymongo}
-%endif
-
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
 ln -svf %{_controller_dir}/conf/cron/rpmController $RPM_BUILD_ROOT/etc/cron.hourly/rpmController
+
+easy_install-2.6 pymongo
+easy_install-2.6 argparse
 
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
