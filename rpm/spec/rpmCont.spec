@@ -52,7 +52,7 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
   echo "Ussing easy_install-2.6"
   for package in `cat %{_controller_dir}/requirements.txt`:
   do
-    print $package
+    echo $package
     easy_install-2.6 $package
   done
 %else
