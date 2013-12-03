@@ -46,7 +46,7 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 # post-install section:
 # -------------------------------------------------------------------------------------------- #
 %post
-%if `facter operatingsystemmajrelease` == 5
+%if $("facter operatingsystemmajrelease") == 5
   %{Requires: python26, python26-distribute, python26-argparse}
   easy_install-2.6 pymongo
 %else
