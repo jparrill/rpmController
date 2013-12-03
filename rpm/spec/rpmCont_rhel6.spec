@@ -8,7 +8,7 @@ BuildArch: noarch
 Provides:  rpmcontroller
 Group: Application/M2M Global Services
 Distribution: Global Services
-Requires: python >= 2.6.6, python-setuptools
+Requires: python >= 2.6.6, python-setuptools, python-pymongo, python-argparse, python-bson
 Vendor: Telefónica I+D
 
 %description
@@ -50,9 +50,6 @@ cp -rp %{_gitdir}/* $RPM_BUILD_ROOT%{_controller_dir}
 ln -svf %{_controller_dir}/bin/rpmcontroller $RPM_BUILD_ROOT/usr/bin/rpmcontroller
 ln -svf %{_controller_dir}/conf/cron/rpmController $RPM_BUILD_ROOT/etc/cron.hourly/rpmController
 
-easy_install-2.6 pymongo
-easy_install-2.6 argparse
-
 # -------------------------------------------------------------------------------------------- #
 # pre-uninstall section:
 # -------------------------------------------------------------------------------------------- #
@@ -60,7 +57,6 @@ easy_install-2.6 argparse
 if [ $1 == 0 ]; then
   [ -h /usr/bin/rpmcontroller ] && unlink /usr/bin/rpmcontroller
 fi
-
 
 # -------------------------------------------------------------------------------------------- #
 # post-uninstall section:
