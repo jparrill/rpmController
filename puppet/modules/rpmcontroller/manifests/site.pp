@@ -33,9 +33,4 @@ package { 'rpmcontroller':
   ensure  => latest,
   require => Yumrepo['repo_rpmcontroller'],
 }    
-->    
-file { 'config_rpmcontroler':
-  ensure  => file,
-  path  => $path_to_config,
-  content => template('rpmcontroller/rpmController.erb'),    
-}
+
