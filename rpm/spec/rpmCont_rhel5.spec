@@ -1,7 +1,7 @@
 Summary: One RPM Controller to rule them all
 Name: rpmcontroller
-Version: %{_gs_version}.el5
-Release: %{_gs_revision}
+Version: %{_gs_version}
+Release: %{_gs_revision}.el5
 License: MIT
 BuildRoot: %{_topdir}/BUILD/%{name}
 BuildArch: noarch
