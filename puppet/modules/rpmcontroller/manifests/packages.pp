@@ -12,8 +12,14 @@ class rpmcontroller::packages inherits rpmcontroller::params {
     gpgcheck => 0,
     baseurl  => $path_to_repo_rpmcontroller,
     priority => 1,
-   }
-
+   } 
+  ->
+  exec { 'yum-clean-expire-cache':
+      user => 'root',
+      path => '/usr/bin',
+      command => 'yum clean expire-cache',
+  }
+  ->
   package { 'rpmcontroller':
     ensure  => latest,
     require => Yumrepo['repo_rpmcontroller'],
