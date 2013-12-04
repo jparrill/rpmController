@@ -8,7 +8,7 @@ BuildArch: noarch
 Provides:  rpmcontroller
 Group: Application/M2M Global Services
 Distribution: Global Services
-Requires: python26, python26-distribute, python26-pymongo, python26-argparse 
+Requires: python, python-setuptools, pymongo, python-argparse 
 Vendor: Telefónica I+D
 
 %description
