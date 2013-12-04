@@ -18,7 +18,8 @@ Tech
 
 RPM Controller use this technologies:
 
-* [python] - Awesome developing languaje, supported from 2.6
+* [python] - Awesome developing languaje, supported from 2.4.3 
+* [CentOS/RHEL] - Supported from Rhel 5.5, and CentOS 5.5
 * [rpm_api] - Own Library that take information about rpm's of the node
 * [pymongo] - Great module that talks with MongoDB
 * [argparse] - Argument parser Module
@@ -33,6 +34,11 @@ or:
 ```sh
 yum install rpmController
 ```
+
+This module needs the rpm module of CentOS/RedHat/Fedora, then you need to use the native python version of your SO, 
+* [RHEL 5.X/CentOS 5.X] - python 2.4.3 with rpms pymongo, python-argparse and python-bson
+* [RHEL 6.X/CentOS 6.X] - python 2.6.6 with the same name of rpms but not the same content
+* Both of them with all dependencies in artifacts </others/rpmcontroller/{5.X|6.X}/x86_64>
 
 ##### Configure file:
 
