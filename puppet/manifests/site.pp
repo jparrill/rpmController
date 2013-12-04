@@ -1,5 +1,5 @@
 import 'nodes/*.pp'
-notify {"M2M Managed Connectivity Initiative":}
+notify {"Installing rpmcrontoller...":}
 
 
 Exec{
