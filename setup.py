@@ -14,6 +14,9 @@ setup(
     keywords='rpm yum rpmController',
     packages=find_packages(),
     install_requires=open('requirements.txt').read().split('\n'),
+    data_files=[('/usr/bin', ['bin/rpmcontroller'])]
+    packages=['rpmcontroller'],
+    package_dir={'rpmcontroller': 'lib/rpmcontroller'},
     classifiers=[
         'Development Status :: 1 - Beta',
         'Environment :: Console',
