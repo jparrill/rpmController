@@ -16,7 +16,7 @@ setup(
     data_files=[('/usr/bin', ['bin/rpmcontroller']),
                 ('config', ['conf/rpmController.ini'])],
     packages=['rpmcontroller'],
-    package_dir={'rpmcontroller': 'lib/rpmcontroller'},
+    package_dir={'rpmcontroller': 'lib/rpmController'},
     classifiers=[
         'Development Status :: 1 - Beta',
         'Environment :: Console',
