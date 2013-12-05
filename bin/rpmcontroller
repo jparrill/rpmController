@@ -70,6 +70,7 @@ def check_all():
 
   elif updates > 0:
     print "- Number of Updates in MongoDB: %d" % updates
+    mongo.adder(comp.formatter(info_host['fqdn']), merged_packages)
 
   else:
     print "- There is not new RPMs in the Node"

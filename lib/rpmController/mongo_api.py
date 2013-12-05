@@ -52,6 +52,17 @@ class Info(object):
       logging.critical('Error updating %s', rpm["name"])
     return code
 
+  def adder(self, collection, packages):
+    ## Add new rpms to Mongo
+    db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
+    try:
+      logging.debug('Adding RPMs to collection %s')
+      db[collection].insert(packages)
+    except:
+      logging.error('Error adding RPMs to collection %s', collection)
+      print "Error adding RPMs to collection %s"
+      raise
+
   def collection_maker(self, collection, info_host, packages):
     ## Make a new collection if not exists
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
