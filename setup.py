@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='rpmController',
@@ -12,7 +12,6 @@ setup(
     author='Francisco Garcia Troitiño, Juan Manuel Parrilla',
     author_email='troitino@tid.es, padajuan@gmail.com',
     keywords='rpm yum rpmController',
-    packages=find_packages(),
     install_requires=open('requirements.txt').read().split('\n'),
     data_files=[('/usr/bin', ['bin/rpmcontroller']),
                 ('config', ['conf/rpmController.ini'])],
