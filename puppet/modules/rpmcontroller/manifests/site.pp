@@ -1,11 +1,19 @@
  
-$path_to_repo_rpmcontroller=http://artifacts.hi.inet/others/rpmController/6.X/x86_64/
-$ip=ci-rmtest.hi.inet
-$port=27017
-$database=rpmdb
-$path_to_config=/opt/rpmcontroller/conf/rpmController.ini
+$ip="ci-rmtest.hi.inet"
+$port="27017"
+$database="rpmdb"
+$path_to_config="/opt/rpmcontroller/conf/rpmController.ini"
 
 
+
+if ( $::operatingsystemmajrelease == "6" )
+{
+  $path_to_repo_rpmcontroller="http://artifacts.hi.inet/others/rpmController/6.X/x86_64/"
+}
+else
+{
+  $path_to_repo_rpmcontroller="http://artifacts.hi.inet/others/rpmController/5.X/x86_64/"
+}
 
 File {
       seluser  => 'system_u',
