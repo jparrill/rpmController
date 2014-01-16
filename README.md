@@ -71,8 +71,8 @@ Optional arguments:
 
 Authors:
 ----
-* Juan Manuel Parrilla: [Email][JP_Email] [Twitter][@kerbeross]
-* Francisco García Troitiño: [Email][FGT_Email]
+* Juan Manuel Parrilla: [Profile][JP_PDI] [Twitter][@kerbeross]
+* Francisco García Troitiño: [Profile][FGT_PDI]
 
 
 License
@@ -82,9 +82,9 @@ MIT
 
 *Free Software, Hell Yeah!*
 
-  [JP_Email]: padajuan@gmail.com
+  [JP_PDI]: https://pdihub.hi.inet/jmp390
   [@kerbeross]: http://twitter.com/@kerbeross
-  [FGT_Email]: troitino@tid.es
+  [FGT_PDI]: https://pdihub.hi.inet/troitino
   [1]: git@pdihub.hi.inet:troitino/rpmControler.git
   [Pymongo]: https://github.com/mongodb/mongo-python-driver
   [Argparse]: https://code.google.com/p/argparse
