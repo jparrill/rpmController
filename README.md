@@ -18,7 +18,7 @@ Tech
 
 RPM Controller use this technologies:
 
-* [python] - Awesome developing languaje, supported from 2.4.3 
+* [Python] - Awesome developing languaje, supported from 2.4.3 
 * [CentOS/RHEL] - Supported from Rhel 5.5, and CentOS 5.5
 * [rpm_api] - Own Library that take information about rpm's of the node
 * [Pymongo] - Great module that talks with MongoDB
@@ -71,8 +71,8 @@ Optional arguments:
 
 Authors:
 ----
-Juan Manuel Parrilla: [Email][JP_Email] [Twitter][@kerbeross]
-Francisco García Troitiño: [Email][FGT_Email]
+* Juan Manuel Parrilla: [Email][JP_Email] [Twitter][@kerbeross]
+* Francisco García Troitiño: [Email][FGT_Email]
 
 
 License
@@ -88,3 +88,5 @@ MIT
   [1]: git@pdihub.hi.inet:troitino/rpmControler.git
   [Pymongo]: https://github.com/mongodb/mongo-python-driver
   [Argparse]: https://code.google.com/p/argparse
+  [Python]: http://www.python.org/
+  [CentOS/RHEL]: http://www.centos.org/
