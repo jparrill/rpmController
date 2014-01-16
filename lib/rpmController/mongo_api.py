@@ -42,12 +42,12 @@ class Info(object):
     connection = Connection(self.ip_mongo, self.port_mongo)
     return connection[self.db_mongo]
 
-  def deleter(self, collection, rpm, status):
+  def deleter(self, collection, rpm, status, review_date):
     ## Put deletef field of collection to true or false
     db = self.mongo_con(self.ip_mongo, self.port_mongo, self.db_mongo)
     try:
       logging.debug('modifying RPM in MongoDB: %s', rpm["name"])
-      code = db[collection].update({"name":rpm["name"], "version":rpm["version"], "release":rpm["release"]}, {'$set': {"deleted": status}})
+      code = db[collection].update({"name":rpm["name"], "version":rpm["version"], "release":rpm["release"]}, {'$set': {"deleted": status, "review_date": review_date}})
     except:
       logging.critical('Error updating %s', rpm["name"])
     return code
