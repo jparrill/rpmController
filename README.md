@@ -11,7 +11,7 @@ Version
 Status
 ------
 
- RPM Generation:![Build Status](http://10.95.11.166/jenkins/job/RE-rpm_controller-GenRPM/badge/icon)
+ RPM Generation:![Build Status](http://ci-smartm2m-01.hi.inet/hudson/view/RE/job/RE-rpm_controller-GenRPM/badge/icon)
 
 Tech
 ----
@@ -21,12 +21,12 @@ RPM Controller use this technologies:
 * [python] - Awesome developing languaje, supported from 2.4.3 
 * [CentOS/RHEL] - Supported from Rhel 5.5, and CentOS 5.5
 * [rpm_api] - Own Library that take information about rpm's of the node
-* [pymongo] - Great module that talks with MongoDB
-* [argparse] - Argument parser Module
+* [Pymongo] - Great module that talks with MongoDB
+* [Argparse] - Argument parser Module
 
 Installation
 --------------
-How to install module:
+How to install [rpmController][1]:
 ```sh
 git clone git@pdihub.hi.inet:troitino/rpmControler.git
 ```
@@ -69,6 +69,12 @@ Optional arguments:
   --version             show program's version number and exit
 ```
 
+Authors:
+----
+Juan Manuel Parrilla: [Email][JP_Email] [Twitter][@kerbeross]
+Francisco García Troitiño: [Email][FGT_Email]
+
+
 License
 ----
 
@@ -76,9 +82,9 @@ MIT
 
 *Free Software, Hell Yeah!*
 
-  [Juan Manuel Parrilla]: juanmanuel.parrilla@amaris.com
+  [JP_Email]: padajuan@gmail.com
   [@kerbeross]: http://twitter.com/@kerbeross
-  [Francisco García Troitiño]: troitino@tid.es
+  [FGT_Email]: troitino@tid.es
   [1]: git@pdihub.hi.inet:troitino/rpmControler.git
   [Pymongo]: https://github.com/mongodb/mongo-python-driver
   [Argparse]: https://code.google.com/p/argparse
