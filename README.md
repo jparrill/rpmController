@@ -8,11 +8,6 @@ Version
 
 1.0
 
-Status
-------
-
- RPM Generation:![Build Status](http://ci-smartm2m-01.hi.inet/hudson/view/RE/job/RE-rpm_controller-GenRPM/badge/icon)
-
 Tech
 ----
 
@@ -82,10 +77,10 @@ MIT
 
 *Free Software, Hell Yeah!*
 
-  [JP_PDI]: https://pdihub.hi.inet/jmp390
+  [JP_PDI]: https://github.com/padajuan
   [@kerbeross]: http://twitter.com/@kerbeross
-  [FGT_PDI]: https://pdihub.hi.inet/troitino
-  [1]: git@pdihub.hi.inet:troitino/rpmControler.git
+  [FGT_PDI]: https://github.com/ftroitino
+  [1]: https://github.com/padajuan/rpmController
   [Pymongo]: https://github.com/mongodb/mongo-python-driver
   [Argparse]: https://code.google.com/p/argparse
   [Python]: http://www.python.org/
