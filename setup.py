@@ -6,7 +6,7 @@ from setuptools import setup
 setup(
     name='rpmController',
     version='0.1.0',
-    url='https://pdihub.hi.inet/troitino/rpmControler',
+    url='https://github.com/padajuan/rpmController',
     license='MIT',
     description='more control about your machine rpms',
     author='Francisco Garcia Troitiño, Juan Manuel Parrilla',
